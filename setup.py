@@ -7,6 +7,11 @@ from setuptools import setup, find_packages, dist
 dist.Distribution(dict(setup_requires=['xbob.blitz']))
 from xbob.blitz.extension import Extension
 
+import os
+package_dir = os.path.dirname(os.path.realpath(__file__))
+package_dir = os.path.join(package_dir, 'xbob', 'machine', 'include')
+include_dirs = [package_dir]
+
 packages = ['bob-machine >= 1.3']
 version = '2.0.0a0'
 
@@ -38,7 +43,7 @@ setup(
     ext_modules = [
       Extension("xbob.machine._externals",
         [
-          "xbob/io/externals.cpp",
+          "xbob/machine/externals.cpp",
           ],
         packages = packages,
         include_dirs = include_dirs,
@@ -46,10 +51,11 @@ setup(
         ),
       Extension("xbob.machine._library",
         [
-          #"xbob/measure/activation.cpp",
-          "xbob/measure/main.cpp",
+          #"xbob/machine/activation.cpp",
+          "xbob/machine/main.cpp",
           ],
         packages = packages,
+        include_dirs = include_dirs,
         version = version,
         ),
       ],

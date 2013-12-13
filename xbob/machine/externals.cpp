@@ -60,7 +60,7 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
   PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, module_methods, module_docstr);
 
   /* register some constants */
-  PyModule_AddIntConstant(m, "__api_version__", XBOB_IO_API_VERSION);
+  PyModule_AddIntConstant(m, "__api_version__", XBOB_MACHINE_API_VERSION);
   PyModule_AddStringConstant(m, "__version__", XBOB_EXT_MODULE_VERSION);
   PyModule_AddObject(m, "versions", build_version_dictionary());
 
