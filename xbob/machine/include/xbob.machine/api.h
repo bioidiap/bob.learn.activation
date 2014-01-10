@@ -36,7 +36,7 @@ typedef struct {
   PyObject_HEAD
 
   /* Type-specific fields go here. */
-  boost::shared_ptr<bob::machine::Activation> o;
+  bob::machine::Activation* base;
 
 } PyBobMachineActivation;
 
