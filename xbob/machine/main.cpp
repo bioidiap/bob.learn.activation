@@ -5,10 +5,14 @@
  * @brief Bindings to bob::machine
  */
 
+#define XBOB_MACHINE_MODULE
+#include <xbob.machine/api.h>
+
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
-#include <xbob.machine/api.h>
+#include <xbob.blitz/capi.h>
+#include <xbob.io/api.h>
 
 static PyMethodDef library_methods[] = {
     {0}  /* Sentinel */

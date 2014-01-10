@@ -88,8 +88,6 @@ typedef struct {
 #    endif
 #  endif
 
-  static void **PyXbobMachine_API;
-
   /**************
    * Versioning *
    **************/

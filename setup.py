@@ -4,13 +4,14 @@
 # Mon 16 Apr 08:18:08 2012 CEST
 
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['xbob.blitz']))
+dist.Distribution(dict(setup_requires=['xbob.blitz', 'xbob.io']))
 from xbob.blitz.extension import Extension
+import xbob.io
 
 import os
 package_dir = os.path.dirname(os.path.realpath(__file__))
 package_dir = os.path.join(package_dir, 'xbob', 'machine', 'include')
-include_dirs = [package_dir]
+include_dirs = [package_dir, xbob.io.get_include()]
 
 packages = ['bob-machine >= 1.3']
 version = '2.0.0a0'
