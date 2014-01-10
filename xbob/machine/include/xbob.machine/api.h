@@ -98,6 +98,8 @@ typedef struct {
    * Bindings for xbob.machine.Activation *
    ****************************************/
 
+# define PyBobMachineActivation_Type (*(PyBobMachineActivation_Type_TYPE *)PyXbobIo_API[PyBobMachineActivation_Type_NUM])
+
 # if !defined(NO_IMPORT_ARRAY)
 
   /**
