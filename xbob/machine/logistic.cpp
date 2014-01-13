@@ -2,17 +2,17 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Mon 13 Jan 2014 17:25:32 CET
  *
- * @brief Implementation of the Identity Activation function
+ * @brief Implementation of the Logistic Activation function
  */
 
 #include <xbob.machine/api.h>
 
-PyDoc_STRVAR(s_activationsubtype_str, XBOB_EXT_MODULE_PREFIX ".IdentityActivation");
+PyDoc_STRVAR(s_activationsubtype_str, XBOB_EXT_MODULE_PREFIX ".LogisticActivation");
 
 PyDoc_STRVAR(s_activationsubtype_doc,
-"IdentityActivation() -> new IdentityActivation\n\
+"LogisticActivation() -> new LogisticActivation\n\
 \n\
-Computes :math:`f(z) = z` as activation function.\n\
+Computes :math:`f(z) = 1/(1+ e^{-z})` as activation function.\n\
 \n\
 ");
 
@@ -20,7 +20,7 @@ typedef struct {
   PyBobMachineActivationObject parent;
 
   /* Type-specific fields go here. */
-  bob::machine::IdentityActivation* base;
+  bob::machine::LogisticActivation* base;
 
 } PyBobMachineActivationSubtypeObject;
 
@@ -33,7 +33,7 @@ static int PyBobMachineActivationSubtype_init(PyBobMachineActivationSubtypeObjec
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "", kwlist)) return -1;
 
   try {
-    self->base = new bob::machine::IdentityActivation();
+    self->base = new bob::machine::LogisticActivation();
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
