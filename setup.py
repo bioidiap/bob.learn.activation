@@ -52,7 +52,7 @@ setup(
         ),
       Extension("xbob.machine._library",
         [
-          #"xbob/machine/activation.cpp",
+          "xbob/machine/activation.cpp",
           "xbob/machine/main.cpp",
           ],
         packages = packages,

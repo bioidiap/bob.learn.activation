@@ -10,7 +10,6 @@
 
 #include <Python.h>
 #include <xbob.machine/config.h>
-#include <bob/config.h>
 #include <bob/machine/Activation.h>
 
 #define XBOB_MACHINE_MODULE_PREFIX xbob.machine
@@ -31,14 +30,14 @@
  * Bindings for xbob.io.Activation *
  ***********************************/
 
-/* Type definition for PyBobIoFileObject */
+/* Type definition for PyBobMachineActivationObject */
 typedef struct {
   PyObject_HEAD
 
   /* Type-specific fields go here. */
   bob::machine::Activation* base;
 
-} PyBobMachineActivation;
+} PyBobMachineActivationObject;
 
 #define PyBobMachineActivation_Type_NUM 1
 #define PyBobMachineActivation_Type_TYPE PyTypeObject
@@ -48,7 +47,7 @@ typedef struct {
 
 #ifdef XBOB_MACHINE_MODULE
 
-  /* This section is used when compiling `xbob.core.random' itself */
+  /* This section is used when compiling `xbob.machine' itself */
 
   /**************
    * Versioning *
@@ -98,7 +97,7 @@ typedef struct {
    * Bindings for xbob.machine.Activation *
    ****************************************/
 
-# define PyBobMachineActivation_Type (*(PyBobMachineActivation_Type_TYPE *)PyXbobIo_API[PyBobMachineActivation_Type_NUM])
+# define PyBobMachineActivation_Type (*(PyBobMachineActivation_Type_TYPE *)PyXbobMachine_API[PyBobMachineActivation_Type_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 

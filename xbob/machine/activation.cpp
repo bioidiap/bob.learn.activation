@@ -7,8 +7,13 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#include <cleanup.h>
+#define XBOB_MACHINE_MODULE
+#include "cleanup.h"
+#include <xbob.machine/api.h>
+#include <xbob.io/api.h>
+#include <xbob.blitz/cppapi.h>
 #include <bob/machine/Activation.h>
+#include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <structmember.h>
 
@@ -45,56 +50,32 @@ static int PyBobMachineActivation_init(PyBobMachineActivationObject* self, PyObj
 
 }
 
-PyDoc_STRVAR(s_call_str, "f");
-PyDoc_STRVAR(s_call_doc,
-"o.f(z, [res]) -> array | scalar
-
-Computes the activated value, given an input array or scalar\n\
-``z``, placing results in ``res`` (and returning it).
-
-If ``z`` is an array, then you can pass another array in ``res``\n\
-to store the results and, in this case, we won't allocate a new\n\
-one for that purpose. This can be a speed-up in certain scenarios.\n\
-Note this does not work for scalars as it makes little sense to\n\
-avoid scalar allocation at this level.\n\
-\n\
-If you decide to pass an array in ``res``, note this array should\n\
-have the exact same dimensions as the input array ``z``. It is an
-error otherwise.\n\
-\n\
-.. note::\n\
-\n\
-   This method only accepts 64-bit float arrays as input or\n\
-   output.\n\
-\n\
-");
-
 /**
  * Maps all elements of arr through function() into retval
  */
 static int apply(boost::function<double (double)> function,
     PyBlitzArrayObject* z, PyBlitzArrayObject* res) {
 
-  if (arr->ndim == 1) {
-    blitz::Array<double,1>* z_ = PyBlitzArrayCxx_AsBlitz<double,1>(z);
-    blitz::Array<double,1>* res_ = PyBlitzArrayCxx_AsBlitz<double,1>(res);
+  if (z->ndim == 1) {
+    auto z_ = PyBlitzArrayCxx_AsBlitz<double,1>(z);
+    auto res_ = PyBlitzArrayCxx_AsBlitz<double,1>(res);
     for (int k=0; k<z_->extent(0); ++k)
       res_->operator()(k) = function(z_->operator()(k));
     return 1;
   }
 
-  else if (array->ndim == 2) {
-    blitz::Array<double,2>* z_ = PyBlitzArrayCxx_AsBlitz<double,2>(z);
-    blitz::Array<double,2>* res_ = PyBlitzArrayCxx_AsBlitz<double,2>(res);
+  else if (z->ndim == 2) {
+    auto z_ = PyBlitzArrayCxx_AsBlitz<double,2>(z);
+    auto res_ = PyBlitzArrayCxx_AsBlitz<double,2>(res);
     for (int k=0; k<z_->extent(0); ++k)
       for (int l=0; l<z_->extent(1); ++l)
         res_->operator()(k,l) = function(z_->operator()(k,l));
     return 1;
   }
 
-  else if (array->ndim == 3) {
-    blitz::Array<double,3>* z_ = PyBlitzArrayCxx_AsBlitz<double,3>(z);
-    blitz::Array<double,3>* res_ = PyBlitzArrayCxx_AsBlitz<double,3>(res);
+  else if (z->ndim == 3) {
+    auto z_ = PyBlitzArrayCxx_AsBlitz<double,3>(z);
+    auto res_ = PyBlitzArrayCxx_AsBlitz<double,3>(res);
     for (int k=0; k<z_->extent(0); ++k)
       for (int l=0; l<z_->extent(1); ++l)
         for (int m=0; m<z_->extent(2); ++m)
@@ -102,9 +83,9 @@ static int apply(boost::function<double (double)> function,
     return 1;
   }
 
-  else if (array->ndim == 4) {
-    blitz::Array<double,4>* z_ = PyBlitzArrayCxx_AsBlitz<double,4>(z);
-    blitz::Array<double,4>* res_ = PyBlitzArrayCxx_AsBlitz<double,4>(res);
+  else if (z->ndim == 4) {
+    auto z_ = PyBlitzArrayCxx_AsBlitz<double,4>(z);
+    auto res_ = PyBlitzArrayCxx_AsBlitz<double,4>(res);
     for (int k=0; k<z_->extent(0); ++k)
       for (int l=0; l<z_->extent(1); ++l)
         for (int m=0; m<z_->extent(2); ++m)
@@ -118,14 +99,18 @@ static int apply(boost::function<double (double)> function,
 }
 
 static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
+    double (bob::machine::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
+
+  /* Parses input arguments in a single shot */
+  static const char* const_kwlist[] = {"z", 0};
+  static char** kwlist = const_cast<char**>(const_kwlist);
 
   PyObject* z = 0;
 
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O", kwlist, &z)) return 0;
 
-  //protects acquired resources through this scope
-  auto z_ = make_safe(z);
+  //note: object z is borrowed
 
   if (PyBlitzArray_Check(z) || PyArray_Check(z)) {
 
@@ -149,7 +134,8 @@ static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
     auto res_ = make_safe(res);
 
     // processes the data
-    int ok = apply(boost::bind(&bob::machine::Activation::f, *(o->base), _1), z_converted, res);
+    int ok = apply(boost::bind(method, o->base, _1),
+        z_converted, reinterpret_cast<PyBlitzArrayObject*>(res));
 
     if (!ok) {
       PyErr_SetString(PyExc_RuntimeError, "unexpected error occurred applying C++ activation function to input array (DEBUG ME)");
@@ -165,7 +151,8 @@ static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
 
     PyObject* z_float = PyNumber_Float(z);
     auto z_float_ = make_safe(z_float);
-    double res_c = o->base->f(PyFloat_AsDouble(z_float);
+    auto bound_method = boost::bind(method, o->base, _1);
+    double res_c = bound_method(PyFloat_AsDouble(z_float));
     return PyFloat_FromDouble(res_c);
 
   }
@@ -176,6 +163,7 @@ static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
 }
 
 static PyObject* PyBobMachineActivation_call2(PyBobMachineActivationObject* o,
+    double (bob::machine::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
@@ -217,14 +205,14 @@ static PyObject* PyBobMachineActivation_call2(PyBobMachineActivationObject* o,
   for (Py_ssize_t i=0; i<z->ndim; ++i) {
 
     if (z->shape[i] != res->shape[i]) {
-      PyErr_Format(PyExc_RuntimeError, "Input and output arrays should have matching sizes, but dimension %" PY_FORMAT_SIZE_T "d of input array `z' has %" PY_FORMAT_SIZE_T "d positions while output array `res' has %" PY_FORMAT_SIZE_T "d positions", z->shape[i], res->shape[i]);
+      PyErr_Format(PyExc_RuntimeError, "Input and output arrays should have matching sizes, but dimension %" PY_FORMAT_SIZE_T "d of input array `z' has %" PY_FORMAT_SIZE_T "d positions while output array `res' has %" PY_FORMAT_SIZE_T "d positions", i, z->shape[i], res->shape[i]);
       return 0;
     }
 
   }
 
   //at this point all checks are done, we can proceed into calling C++
-  int ok = apply(boost::bind(&bob::machine::Activation::f, *(o->base), _1), z, res);
+  int ok = apply(boost::bind(method, o->base, _1), z, res);
 
   if (!ok) {
     PyErr_SetString(PyExc_RuntimeError, "unexpected error occurred applying C++ activation function to input array (DEBUG ME)");
@@ -232,9 +220,33 @@ static PyObject* PyBobMachineActivation_call2(PyBobMachineActivationObject* o,
   }
 
   Py_INCREF(res);
-  return res;
+  return reinterpret_cast<PyObject*>(res);
 
 }
+
+PyDoc_STRVAR(s_call_str, "f");
+PyDoc_STRVAR(s_call_doc,
+"o.f(z, [res]) -> array | scalar\n\
+\n\
+Computes the activated value, given an input array or scalar\n\
+``z``, placing results in ``res`` (and returning it).\n\
+\n\
+If ``z`` is an array, then you can pass another array in ``res``\n\
+to store the results and, in this case, we won't allocate a new\n\
+one for that purpose. This can be a speed-up in certain scenarios.\n\
+Note this does not work for scalars as it makes little sense to\n\
+avoid scalar allocation at this level.\n\
+\n\
+If you decide to pass an array in ``res``, note this array should\n\
+have the exact same dimensions as the input array ``z``. It is an\n\
+error otherwise.\n\
+\n\
+.. note::\n\
+\n\
+   This method only accepts 64-bit float arrays as input or\n\
+   output.\n\
+\n\
+");
 
 static PyObject* PyBobMachineActivation_call(PyBobMachineActivationObject* o,
   PyObject* args, PyObject* kwds) {
@@ -244,11 +256,13 @@ static PyObject* PyBobMachineActivation_call(PyBobMachineActivationObject* o,
   switch (nargs) {
 
     case 1:
-      return PyBobMachineActivation_call1(self, args, kwds);
+      return PyBobMachineActivation_call1
+        (o, &bob::machine::Activation::f, args, kwds);
       break;
 
     case 2:
-      return PyBobMachineActivation_call2(self, args, kwds);
+      return PyBobMachineActivation_call2
+        (o, &bob::machine::Activation::f, args, kwds);
       break;
 
     default:
@@ -261,6 +275,191 @@ static PyObject* PyBobMachineActivation_call(PyBobMachineActivationObject* o,
 
 }
 
+PyDoc_STRVAR(s_f_prime_str, "f_prime");
+PyDoc_STRVAR(s_f_prime_doc,
+"o.f_prime(z, [res]) -> array | scalar\n\
+\n\
+Computes the derivative of the activated value, given an input\n\
+array or scalar ``z``, placing results in ``res`` (and returning\n\
+it).\n\
+\n\
+If ``z`` is an array, then you can pass another array in ``res``\n\
+to store the results and, in this case, we won't allocate a new\n\
+one for that purpose. This can be a speed-up in certain scenarios.\n\
+Note this does not work for scalars as it makes little sense to\n\
+avoid scalar allocation at this level.\n\
+\n\
+If you decide to pass an array in ``res``, note this array should\n\
+have the exact same dimensions as the input array ``z``. It is an\n\
+error otherwise.\n\
+\n\
+.. note::\n\
+\n\
+   This method only accepts 64-bit float arrays as input or\n\
+   output.\n\
+\n\
+");
+
+static PyObject* PyBobMachineActivation_f_prime(PyBobMachineActivationObject* o,
+  PyObject* args, PyObject* kwds) {
+
+  Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
+
+  switch (nargs) {
+
+    case 1:
+      return PyBobMachineActivation_call1
+        (o, &bob::machine::Activation::f_prime, args, kwds);
+      break;
+
+    case 2:
+      return PyBobMachineActivation_call2
+        (o, &bob::machine::Activation::f_prime, args, kwds);
+      break;
+
+    default:
+
+      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - %s requires 1 or 2 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", s_call_str, nargs);
+
+  }
+
+  return 0;
+
+}
+
+PyDoc_STRVAR(s_f_prime_from_f_str, "f_prime_from_f");
+PyDoc_STRVAR(s_f_prime_from_f_doc,
+"o.f_prime_from_f(a, [res]) -> array | scalar\n\
+\n\
+Computes the derivative of the activated value, given the\n\
+derivative value ``a``, placing results in ``res`` (and returning\n\
+it).\n\
+\n\
+If ``a`` is an array, then you can pass another array in ``res``\n\
+to store the results and, in this case, we won't allocate a new\n\
+one for that purpose. This can be a speed-up in certain scenarios.\n\
+Note this does not work for scalars as it makes little sense to\n\
+avoid scalar allocation at this level.\n\
+\n\
+If you decide to pass an array in ``res``, note this array should\n\
+have the exact same dimensions as the input array ``a``. It is an\n\
+error otherwise.\n\
+\n\
+.. note::\n\
+\n\
+   This method only accepts 64-bit float arrays as input or\n\
+   output.\n\
+\n\
+");
+
+static PyObject* PyBobMachineActivation_f_prime_from_f(PyBobMachineActivationObject* o,
+  PyObject* args, PyObject* kwds) {
+
+  Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
+
+  switch (nargs) {
+
+    case 1:
+      return PyBobMachineActivation_call1
+        (o, &bob::machine::Activation::f_prime_from_f, args, kwds);
+      break;
+
+    case 2:
+      return PyBobMachineActivation_call2
+        (o, &bob::machine::Activation::f_prime_from_f, args, kwds);
+      break;
+
+    default:
+
+      PyErr_Format(PyExc_RuntimeError, "number of arguments mismatch - %s requires 1 or 2 arguments, but you provided %" PY_FORMAT_SIZE_T "d (see help)", s_call_str, nargs);
+
+  }
+
+  return 0;
+
+}
+
+PyDoc_STRVAR(s_unique_id_str, "unique_identifier");
+PyDoc_STRVAR(s_unique_id_doc,
+"o.unique_identifier() -> str\n\
+\n\
+Returns a unique (string) identifier, used by this class\n\
+in connection with the Activation registry.\n\
+\n\
+");
+
+static PyObject* PyBobMachineActivation_UniqueIdentifier (PyBobMachineActivationObject* o) {
+  return Py_BuildValue("s", o->base->unique_identifier().c_str());
+}
+
+PyDoc_STRVAR(s_load_str, "load");
+PyDoc_STRVAR(s_load_doc,
+"o.load(f) -> None\n\
+\n\
+Loads itself from a :py:class:`xbob.io.HDF5File`\n\
+\n\
+");
+
+static PyObject* PyBobMachineActivation_Load(PyBobMachineActivationObject* o,
+    PyObject* f) {
+
+  if (!PyBobIoHDF5File_Check(f)) {
+    PyErr_Format(PyExc_TypeError, "Activation function cannot load itself from `%s', only from an HDF5 file", f->ob_type->tp_name);
+    return 0;
+  }
+
+  auto h5f = reinterpret_cast<PyBobIoHDF5FileObject*>(f);
+
+  try {
+    o->base->load(*h5f->f);
+  }
+  catch (std::exception& e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    return 0;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot read data from file `%s' (at group `%s'): unknown exception caught", h5f->f->filename().c_str(),
+        h5f->f->cwd().c_str());
+    return 0;
+  }
+
+  Py_RETURN_NONE;
+}
+
+PyDoc_STRVAR(s_save_str, "save");
+PyDoc_STRVAR(s_save_doc,
+"o.save(f) -> None\n\
+\n\
+Loads itself from a :py:class:`xbob.io.HDF5File`\n\
+\n\
+");
+
+static PyObject* PyBobMachineActivation_Save(PyBobMachineActivationObject* o,
+    PyObject* f) {
+
+  if (!PyBobIoHDF5File_Check(f)) {
+    PyErr_Format(PyExc_TypeError, "Activation function cannot write itself to `%s', only to an HDF5 file", f->ob_type->tp_name);
+    return 0;
+  }
+
+  auto h5f = reinterpret_cast<PyBobIoHDF5FileObject*>(f);
+
+  try {
+    o->base->save(*h5f->f);
+  }
+  catch (std::exception& e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    return 0;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot write data to file `%s' (at group `%s'): unknown exception caught", h5f->f->filename().c_str(),
+        h5f->f->cwd().c_str());
+    return 0;
+  }
+
+  Py_RETURN_NONE;
+}
+
 static PyMethodDef PyBobMachineActivation_methods[] = {
   {
     s_call_str,
@@ -268,8 +467,38 @@ static PyMethodDef PyBobMachineActivation_methods[] = {
     METH_VARARGS|METH_KEYWORDS,
     s_call_doc
   },
+  {
+    s_f_prime_str,
+    (PyCFunction)PyBobMachineActivation_f_prime,
+    METH_VARARGS|METH_KEYWORDS,
+    s_f_prime_doc
+  },
+  {
+    s_f_prime_from_f_str,
+    (PyCFunction)PyBobMachineActivation_f_prime_from_f,
+    METH_VARARGS|METH_KEYWORDS,
+    s_f_prime_from_f_doc
+  },
+  {
+    s_unique_id_str,
+    (PyCFunction)PyBobMachineActivation_UniqueIdentifier,
+    METH_NOARGS,
+    s_unique_id_doc
+  },
+  {
+    s_load_str,
+    (PyCFunction)PyBobMachineActivation_Load,
+    METH_O,
+    s_load_doc
+  },
+  {
+    s_save_str,
+    (PyCFunction)PyBobMachineActivation_Save,
+    METH_O,
+    s_save_doc
+  },
   {0} /* Sentinel */
-}
+};
 
 static int PyBobMachineActivation_Check(PyObject* o) {
   return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobMachineActivation_Type));
@@ -287,11 +516,11 @@ static PyObject* PyBobMachineActivation_RichCompare (PyBobMachineActivationObjec
 
   switch (op) {
     case Py_EQ:
-      if (*(self->base) == *(other_->base)) Py_RETURN_TRUE;
+      if (self->base->str() == other_->base->str()) Py_RETURN_TRUE;
       Py_RETURN_FALSE;
       break;
     case Py_NE:
-      if (*(self->base) != *(other_->base)) Py_RETURN_TRUE;
+      if (self->base->str() != other_->base->str()) Py_RETURN_TRUE;
       Py_RETURN_FALSE;
       break;
     default:
@@ -299,6 +528,10 @@ static PyObject* PyBobMachineActivation_RichCompare (PyBobMachineActivationObjec
       return Py_NotImplemented;
   }
 
+}
+
+static PyObject* PyBobMachineActivation_Str (PyBobMachineActivationObject* o) {
+  return Py_BuildValue("s", o->base->str().c_str());
 }
 
 PyTypeObject PyBobMachineActivation_Type = {
@@ -317,8 +550,8 @@ PyTypeObject PyBobMachineActivation_Type = {
     0,                                                 /* tp_as_sequence */
     0,                                                 /* tp_as_mapping */
     0,                                                 /* tp_hash */
-    0,                                                 /* tp_call */
-    0,                                                 /* tp_str */
+    (ternaryfunc)PyBobMachineActivation_call,          /* tp_call */
+    (reprfunc)PyBobMachineActivation_Str,              /* tp_str */
     0,                                                 /* tp_getattro */
     0,                                                 /* tp_setattro */
     0,                                                 /* tp_as_buffer */
@@ -342,23 +575,3 @@ PyTypeObject PyBobMachineActivation_Type = {
     0,                                                 /* tp_alloc */
     0,                                                 /* tp_new */
 };
-
-/**
-    .def("__call__", &activation_f_ndarray_1, (arg("self"), arg("z"), arg("res")), "Computes the activated value, given an input array ``z``, placing results in ``res`` (and returning it)")
-    .def("__call__", &activation_f_ndarray_2, (arg("self"), arg("z")), "Computes the activated value, given an input array ``z``. Returns a newly allocated array with the same size as ``z``")
-    .def("__call__", &bob::machine::Activation::f, (arg("self"), arg("z")), "Computes the activated value, given an input ``z``")
-    .def("f_prime", &activation_f_prime_ndarray_1, (arg("self"), arg("z"), arg("res")), "Computes the derivative of the activated value, placing results in ``res`` (and returning it)")
-    .def("f_prime", &activation_f_prime_ndarray_2, (arg("self"), arg("z")), "Computes the derivative of the activated value, given an input array ``z``. Returns a newly allocated array with the same size as ``z``")
-    .def("f_prime", &bob::machine::Activation::f_prime, (arg("self"), arg("z")), "Computes the derivative of the activated value.")
-    .def("f_prime_from_f", &activation_f_prime_from_f_ndarray_1, (arg("self"), arg("a"), arg("res")), "Computes the derivative of the activated value, given **the activated value** ``a``, placing results in ``res`` (and returning it)")
-    .def("f_prime_from_f", &activation_f_prime_from_f_ndarray_2, (arg("self"), arg("z")), "Computes the derivative of the activated value, given **the activated value** ``a``. Returns a newly allocated array with the same size as ``a`` with the answer.")
-    .def("f_prime_from_f", &bob::machine::Activation::f_prime_from_f, (arg("self"), arg("a")), "Computes the derivative of the activation value, given **the activated value** ``a``.")
-    .def("save", &bob::machine::Activation::save, (arg("self"), arg("h5f")),
-       "Saves itself to a :py:class:`bob.io.HDF5File`")
-    .def("load", &bob::machine::Activation::load, (arg("self"), arg("h5f")),
-       "Loads itself from a :py:class:`bob.io.HDF5File`")
-    .def("unique_identifier",
-        &bob::machine::Activation::unique_identifier, (arg("self")),
-        "Returns a unique identifier, used by this class in connection to the Activation registry.")
-    .def("__str__", &bob::machine::Activation::str)
-**/
