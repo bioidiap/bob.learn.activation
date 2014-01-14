@@ -58,6 +58,7 @@ setup(
           "xbob/machine/logistic_activation.cpp",
           "xbob/machine/tanh_activation.cpp",
           "xbob/machine/mult_tanh_activation.cpp",
+          "xbob/machine/linear.cpp",
           "xbob/machine/main.cpp",
           ],
         packages = packages,

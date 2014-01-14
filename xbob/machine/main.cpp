@@ -45,6 +45,9 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
   if (PyType_Ready(&PyBobMachineMultipliedHyperbolicTangentActivation_Type) < 0)
     return;
 
+  PyBobMachineLinear_Type.tp_new = PyType_GenericNew;
+  if (PyType_Ready(&PyBobMachineLinear_Type) < 0) return;
+
   PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, library_methods, library_docstr);
 
   /* register some constants */
@@ -69,6 +72,9 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   Py_INCREF(&PyBobMachineMultipliedHyperbolicTangentActivation_Type);
   PyModule_AddObject(m, "MultipliedHyperbolicTangentActivation", (PyObject *)&PyBobMachineMultipliedHyperbolicTangentActivation_Type);
+
+  Py_INCREF(&PyBobMachineLinear_Type);
+  PyModule_AddObject(m, "LinearMachine", (PyObject *)&PyBobMachineLinear_Type);
 
   static void* PyXbobMachine_API[PyXbobMachine_API_pointers];
 
@@ -117,6 +123,14 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
    *******************************************************************/
 
   PyXbobMachine_API[PyBobMachineMultipliedHyperbolicTangentActivation_Type_NUM] = (void *)&PyBobMachineMultipliedHyperbolicTangentActivation_Type;
+
+  /************************************
+   * Bindings for xbob.machine.Linear *
+   ************************************/
+
+  PyXbobMachine_API[PyBobMachineLinear_Type_NUM] = (void *)&PyBobMachineLinear_Type;
+
+  PyXbobMachine_API[PyBobMachineLinear_Check_NUM] = (void *)&PyBobMachineLinear_Check;
 
 #if PY_VERSION_HEX >= 0x02070000
 
