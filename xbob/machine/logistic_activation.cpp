@@ -5,6 +5,7 @@
  * @brief Implementation of the Logistic Activation function
  */
 
+#define XBOB_MACHINE_MODULE
 #include <xbob.machine/api.h>
 
 PyDoc_STRVAR(s_logisticactivation_str,
@@ -16,14 +17,6 @@ PyDoc_STRVAR(s_logisticactivation_doc,
 Computes :math:`f(z) = 1/(1+ e^{-z})` as activation function.\n\
 \n\
 ");
-
-typedef struct {
-  PyBobMachineActivationObject parent;
-
-  /* Type-specific fields go here. */
-  bob::machine::LogisticActivation* base;
-
-} PyBobMachineLogisticActivationObject;
 
 static int PyBobMachineLogisticActivation_init
 (PyBobMachineLogisticActivationObject* self, PyObject* args, PyObject* kwds) {

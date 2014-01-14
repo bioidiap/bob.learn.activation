@@ -500,7 +500,7 @@ static PyMethodDef PyBobMachineActivation_methods[] = {
   {0} /* Sentinel */
 };
 
-static int PyBobMachineActivation_Check(PyObject* o) {
+int PyBobMachineActivation_Check(PyObject* o) {
   return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobMachineActivation_Type));
 }
 

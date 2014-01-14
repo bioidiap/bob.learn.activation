@@ -1,7 +1,7 @@
 from ._library import *
 
-from . import __linear__
-from . import __mlp__
+#from . import __linear__
+#from . import __mlp__
 
 def ztnorm_same_value(vect_a, vect_b):
   """Computes the matrix of boolean D for the ZT-norm, which indicates where

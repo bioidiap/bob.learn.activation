@@ -5,6 +5,7 @@
  * @brief Implementation of the MultipliedHyperbolicTangent Activation function
  */
 
+#define XBOB_MACHINE_MODULE
 #include <xbob.machine/api.h>
 
 PyDoc_STRVAR(s_multtanhactivation_str,
@@ -22,14 +23,6 @@ just want to set the constants to the default values (1.0). In\n\
 such a case, prefer to use the more efficient\n\
 :py:class:`bob.machine.HyperbolicTangentActivation`.\n\
 ");
-
-typedef struct {
-  PyBobMachineActivationObject parent;
-
-  /* Type-specific fields go here. */
-  bob::machine::MultipliedHyperbolicTangentActivation* base;
-
-} PyBobMachineMultipliedHyperbolicTangentActivationObject;
 
 static int PyBobMachineMultipliedHyperbolicTangentActivation_init
 (PyBobMachineMultipliedHyperbolicTangentActivationObject* self, PyObject* args, PyObject* kwds) {

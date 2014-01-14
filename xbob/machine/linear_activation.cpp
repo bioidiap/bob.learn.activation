@@ -5,6 +5,7 @@
  * @brief Implementation of the Linear Activation function
  */
 
+#define XBOB_MACHINE_MODULE
 #include <xbob.machine/api.h>
 
 PyDoc_STRVAR(s_linearactivation_str,
@@ -20,14 +21,6 @@ with a given constant. Don't use this if you just want to\n\
 set constant to the default value (1.0). In such a case,\n\
 prefer to use the more efficient :py:class:`IdentityActivation`.\n\
 ");
-
-typedef struct {
-  PyBobMachineActivationObject parent;
-
-  /* Type-specific fields go here. */
-  bob::machine::LinearActivation* base;
-
-} PyBobMachineLinearActivationObject;
 
 static int PyBobMachineLinearActivation_init
 (PyBobMachineLinearActivationObject* self, PyObject* args, PyObject* kwds) {

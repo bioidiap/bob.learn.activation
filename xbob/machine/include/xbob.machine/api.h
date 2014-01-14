@@ -42,8 +42,92 @@ typedef struct {
 #define PyBobMachineActivation_Type_NUM 1
 #define PyBobMachineActivation_Type_TYPE PyTypeObject
 
+#define PyBobMachineActivation_Check_NUM 2
+#define PyBobMachineActivation_Check_RET int
+#define PyBobMachineActivation_Check_PROTO (PyObject* o)
+
+/*******************************************
+ * Bindings for xbob.io.IdentityActivation *
+ *******************************************/
+
+/* Type definition for PyBobMachineIdentityActivationObject */
+typedef struct {
+  PyBobMachineActivationObject parent;
+
+  /* Type-specific fields go here. */
+  bob::machine::IdentityActivation* base;
+
+} PyBobMachineIdentityActivationObject;
+
+#define PyBobMachineIdentityActivation_Type_NUM 3
+#define PyBobMachineIdentityActivation_Type_TYPE PyTypeObject
+
+/*****************************************
+ * Bindings for xbob.io.LinearActivation *
+ *****************************************/
+
+/* Type definition for PyBobMachineLinearActivationObject */
+typedef struct {
+  PyBobMachineActivationObject parent;
+
+  /* Type-specific fields go here. */
+  bob::machine::LinearActivation* base;
+
+} PyBobMachineLinearActivationObject;
+
+#define PyBobMachineLinearActivation_Type_NUM 4
+#define PyBobMachineLinearActivation_Type_TYPE PyTypeObject
+
+/*******************************************
+ * Bindings for xbob.io.LogisticActivation *
+ *******************************************/
+
+/* Type definition for PyBobMachineLogisticActivationObject */
+typedef struct {
+  PyBobMachineActivationObject parent;
+
+  /* Type-specific fields go here. */
+  bob::machine::LogisticActivation* base;
+
+} PyBobMachineLogisticActivationObject;
+
+#define PyBobMachineLogisticActivation_Type_NUM 5
+#define PyBobMachineLogisticActivation_Type_TYPE PyTypeObject
+
+/****************************************************
+ * Bindings for xbob.io.HyperbolicTangentActivation *
+ ****************************************************/
+
+/* Type definition for PyBobMachineHyperbolicTangentActivationObject */
+typedef struct {
+  PyBobMachineActivationObject parent;
+
+  /* Type-specific fields go here. */
+  bob::machine::HyperbolicTangentActivation* base;
+
+} PyBobMachineHyperbolicTangentActivationObject;
+
+#define PyBobMachineHyperbolicTangentActivation_Type_NUM 6
+#define PyBobMachineHyperbolicTangentActivation_Type_TYPE PyTypeObject
+
+/**************************************************************
+ * Bindings for xbob.io.MultipliedHyperbolicTangentActivation *
+ **************************************************************/
+
+/* Type definition: PyBobMachineMultipliedHyperbolicTangentActivationObject */
+typedef struct {
+  PyBobMachineActivationObject parent;
+
+  /* Type-specific fields go here. */
+  bob::machine::MultipliedHyperbolicTangentActivation* base;
+
+} PyBobMachineMultipliedHyperbolicTangentActivationObject;
+
+#define PyBobMachineMultipliedHyperbolicTangentActivation_Type_NUM 7
+#define PyBobMachineMultipliedHyperbolicTangentActivation_Type_TYPE PyTypeObject
+
 /* Total number of C API pointers */
-#define PyXbobMachine_API_pointers 2
+#define PyXbobMachine_API_pointers 8
 
 #ifdef XBOB_MACHINE_MODULE
 
@@ -60,6 +144,38 @@ typedef struct {
    ****************************************/
 
   extern PyBobMachineActivation_Type_TYPE PyBobMachineActivation_Type;
+
+  PyBobMachineActivation_Check_RET PyBobMachineActivation_Check PyBobMachineActivation_Check_PROTO;
+
+  /*******************************************
+   * Bindings for xbob.io.IdentityActivation *
+   *******************************************/
+
+  extern PyBobMachineIdentityActivation_Type_TYPE PyBobMachineIdentityActivation_Type;
+
+  /*****************************************
+   * Bindings for xbob.io.LinearActivation *
+   *****************************************/
+
+  extern PyBobMachineLinearActivation_Type_TYPE PyBobMachineLinearActivation_Type;
+
+  /*******************************************
+   * Bindings for xbob.io.LogisticActivation *
+   *******************************************/
+
+  extern PyBobMachineLogisticActivation_Type_TYPE PyBobMachineLogisticActivation_Type;
+
+  /****************************************************
+   * Bindings for xbob.io.HyperbolicTangentActivation *
+   ****************************************************/
+
+  extern PyBobMachineHyperbolicTangentActivation_Type_TYPE PyBobMachineHyperbolicTangentActivation_Type;
+
+  /**************************************************************
+   * Bindings for xbob.io.MultipliedHyperbolicTangentActivation *
+   **************************************************************/
+
+  extern PyBobMachineMultipliedHyperbolicTangentActivation_Type_TYPE PyBobMachineMultipliedHyperbolicTangentActivation_Type;
 
 #else
 
@@ -98,6 +214,38 @@ typedef struct {
    ****************************************/
 
 # define PyBobMachineActivation_Type (*(PyBobMachineActivation_Type_TYPE *)PyXbobMachine_API[PyBobMachineActivation_Type_NUM])
+
+# define PyBobMachineActivation_Check (*(PyBobMachineActivation_Check_RET (*)PyBobMachineActivation_Check_PROTO) PyXbobMachine_API[PyBobMachineActivation_Check_NUM])
+
+  /************************************************
+   * Bindings for xbob.machine.IdentityActivation *
+   ************************************************/
+
+# define PyBobMachineIdentityActivation_Type (*(PyBobMachineIdentityActivation_Type_TYPE *)PyXbobMachine_API[PyBobMachineIdentityActivation_Type_NUM])
+
+  /**********************************************
+   * Bindings for xbob.machine.LinearActivation *
+   **********************************************/
+
+# define PyBobMachineLinearActivation_Type (*(PyBobMachineLinearActivation_Type_TYPE *)PyXbobMachine_API[PyBobMachineLinearActivation_Type_NUM])
+
+  /************************************************
+   * Bindings for xbob.machine.LogisticActivation *
+   ************************************************/
+
+# define PyBobMachineLogisticActivation_Type (*(PyBobMachineLogisticActivation_Type_TYPE *)PyXbobMachine_API[PyBobMachineLogisticActivation_Type_NUM])
+
+  /*********************************************************
+   * Bindings for xbob.machine.HyperbolicTangentActivation *
+   *********************************************************/
+
+# define PyBobMachineHyperbolicTangentActivation_Type (*(PyBobMachineHyperbolicTangentActivation_Type_TYPE *)PyXbobMachine_API[PyBobMachineHyperbolicTangentActivation_Type_NUM])
+
+  /*******************************************************************
+   * Bindings for xbob.machine.MultipliedHyperbolicTangentActivation *
+   *******************************************************************/
+
+# define PyBobMachineMultipliedHyperbolicTangentActivation_Type (*(PyBobMachineMultipliedHyperbolicTangentActivation_Type_TYPE *)PyXbobMachine_API[PyBobMachineMultipliedHyperbolicTangentActivation_Type_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 

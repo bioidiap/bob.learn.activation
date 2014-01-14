@@ -45,23 +45,58 @@ the import function:
   The include directory can be discovered using
   :py:func:`xbob.machine.get_include`.
 
-Activation Support
-------------------
+Activation Functors
+-------------------
 
 .. cpp:type:: PyBobMachineActivationObject
 
    The pythonic object representation for a ``bob::machine::Activation``
-   object.
+   object. It is the base class of all activation functors available in
+   |project|. In C/C++ code, we recommend you only manipulate objects like this
+   to keep your code agnostic to the activation type being used.
 
    .. code-block:: cpp
 
       typedef struct {
         PyObject_HEAD
-        boost::shared_ptr<bob::machine::Activation> a;
-      } PyBobIoFileObject;
+        bob::machine::Activation* base;
+      } PyBobMachineActivationObject;
 
-   .. cpp:member:: boost::shared_ptr<bob::machine::Activation> a
+   .. cpp:member:: bob::machine::Activation* base
 
-      A pointer to the activation function implementation
+      A pointer to the activation functor virtual implementation.
+
+
+.. cpp:function:: int PyBobMachineActivation_Check(PyObject* o)
+
+   Checks if the input object ``o`` is a ``PyBobMachineActivationObject``.
+   Returns ``1`` if it is, and ``0`` otherwise.
+
+
+.. note::
+
+   Other object definitions exist for each of the specializations for
+   activation functors found in |project|. They are exported through the module
+   C-API, but we don't recommend using them since you'd loose generality. In
+   case you do absolutely need to use any of these derivations, they have all
+   the same object configuration:
+
+   .. code-block:: c++
+
+      typedef struct {
+        PyBobMachineActivationObject parent;
+        bob::machine::<Subtype>Activation* base;
+      } PyBobMachine<Subtype>ActivationObject;
+
+   Presently, ``<Subtype>`` can be one of:
+
+     * Identity
+     * Linear
+     * Logistic
+     * HyperbolicTangent
+     * MultipliedHyperbolicTangent
+
+   Type objects are also named consistently like
+   ``PyBobMachine<Subtype>_Type``.
 
 .. include:: links.rst

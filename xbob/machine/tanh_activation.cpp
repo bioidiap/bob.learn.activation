@@ -5,6 +5,7 @@
  * @brief Implementation of the HyperbolicTangent Activation function
  */
 
+#define XBOB_MACHINE_MODULE
 #include <xbob.machine/api.h>
 
 PyDoc_STRVAR(s_hyperbolictangentactivation_str,
@@ -16,14 +17,6 @@ PyDoc_STRVAR(s_hyperbolictangentactivation_doc,
 Computes :math:`f(z) = \\tanh(z)` as activation function.\n\
 \n\
 ");
-
-typedef struct {
-  PyBobMachineActivationObject parent;
-
-  /* Type-specific fields go here. */
-  bob::machine::HyperbolicTangentActivation* base;
-
-} PyBobMachineHyperbolicTangentActivationObject;
 
 static int PyBobMachineHyperbolicTangentActivation_init
 (PyBobMachineHyperbolicTangentActivationObject* self,

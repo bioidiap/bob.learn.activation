@@ -5,6 +5,7 @@
  * @brief Implementation of the Identity Activation function
  */
 
+#define XBOB_MACHINE_MODULE
 #include <xbob.machine/api.h>
 
 PyDoc_STRVAR(s_identityactivation_str,
@@ -16,14 +17,6 @@ PyDoc_STRVAR(s_identityactivation_doc,
 Computes :math:`f(z) = z` as activation function.\n\
 \n\
 ");
-
-typedef struct {
-  PyBobMachineActivationObject parent;
-
-  /* Type-specific fields go here. */
-  bob::machine::IdentityActivation* base;
-
-} PyBobMachineIdentityActivationObject;
 
 static int PyBobMachineIdentityActivation_init
 (PyBobMachineIdentityActivationObject* self, PyObject* args, PyObject* kwds) {
