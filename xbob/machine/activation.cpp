@@ -115,7 +115,7 @@ static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
   if (PyBlitzArray_Check(z) || PyArray_Check(z)) {
 
     PyBlitzArrayObject* z_converted = 0;
-    PyBlitzArray_Converter(z, &z_converted);
+    if (!PyBlitzArray_Converter(z, &z_converted)) return 0;
     auto z_converted_ = make_safe(z_converted);
 
     if (z_converted->type_num != NPY_FLOAT64) {
@@ -512,7 +512,7 @@ static PyObject* PyBobMachineActivation_RichCompare (PyBobMachineActivationObjec
     return 0;
   }
 
-  PyBobMachineActivationObject* other_ = reinterpret_cast<PyBobMachineActivationObject*>(other);
+  auto other_ = reinterpret_cast<PyBobMachineActivationObject*>(other);
 
   switch (op) {
     case Py_EQ:

@@ -89,10 +89,11 @@ static int PyBobMachineLinear_init_weights(PyBobMachineLinearObject* self,
   PyBlitzArrayObject* weights = 0;
 
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "O&", kwlist,
-        &weights, &PyBlitzArray_Converter)) return -1;
+        &PyBlitzArray_Converter, &weights)) return -1;
+  auto weights_ = make_safe(weights);
 
   if (weights->type_num != NPY_FLOAT64 || weights->ndim != 2) {
-    PyErr_SetString(PyExc_TypeError, "LinearMachine only supports 64-bit floats 2D arrays for input vector `weights'");
+    PyErr_SetString(PyExc_TypeError, "LinearMachine only supports 64-bit floats 2D arrays for property array `weights'");
     return -1;
   }
 
@@ -239,6 +240,293 @@ static void PyBobMachineLinear_delete (PyBobMachineLinearObject* self) {
 
 }
 
+int PyBobMachineLinear_Check(PyObject* o) {
+  return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobMachineLinear_Type));
+}
+
+static PyObject* PyBobMachineLinear_RichCompare (PyBobMachineLinearObject* self, PyObject* other, int op) {
+
+  if (!PyBobMachineLinear_Check(other)) {
+    PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
+        s_linear_str, other->ob_type->tp_name);
+    return 0;
+  }
+
+  auto other_ = reinterpret_cast<PyBobMachineLinearObject*>(other);
+
+  switch (op) {
+    case Py_EQ:
+      if (self->machine->operator==(*other_->machine)) Py_RETURN_TRUE;
+      Py_RETURN_FALSE;
+      break;
+    case Py_NE:
+      if (self->machine->operator!=(*other_->machine)) Py_RETURN_TRUE;
+      Py_RETURN_FALSE;
+      break;
+    default:
+      Py_INCREF(Py_NotImplemented);
+      return Py_NotImplemented;
+  }
+
+}
+
+static PyMethodDef PyBobMachineLinear_methods[] = {
+  {0} /* Sentinel */
+};
+
+/**
+    .add_property("activation", &bob::machine::LinearMachine::getActivation, &bob::machine::LinearMachine::setActivation, "The activation function - by default, the identity function. The output provided by the activation function is passed, unchanged, to the user.")
+**/
+
+PyDoc_STRVAR(s_weights_str, "weights");
+PyDoc_STRVAR(s_weights_doc,
+"Weight matrix to which the input is projected to. The output\n\
+of the project is fed subject to bias and activation before\n\
+being output.\n\
+");
+
+static PyObject* PyBobMachineLinear_getWeights
+(PyBobMachineLinearObject* self, void* /*closure*/) {
+  return PyBlitzArray_NUMPY_WRAP(PyBlitzArrayCxx_NewFromConstArray(self->machine->getWeights()));
+}
+
+static int PyBobMachineLinear_setWeights (PyBobMachineLinearObject* self,
+    PyObject* o, void* /*closure*/) {
+
+  PyBlitzArrayObject* weights = 0;
+  if (!PyBlitzArray_Converter(o, &weights)) return -1;
+  auto weights_ = make_safe(weights);
+
+  if (weights->type_num != NPY_FLOAT64 || weights->ndim != 2) {
+    PyErr_SetString(PyExc_TypeError, "LinearMachine only supports 64-bit floats 2D arrays for property array `weights'");
+    return -1;
+  }
+
+  try {
+    self->machine->setWeights(*PyBlitzArrayCxx_AsBlitz<double,2>(weights));
+  }
+  catch (std::exception& ex) {
+    PyErr_SetString(PyExc_RuntimeError, ex.what());
+    return -1;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `weights' of %s: unknown exception caught", s_linear_str);
+    return -1;
+  }
+
+  return 0;
+
+}
+
+PyDoc_STRVAR(s_biases_str, "biases");
+PyDoc_STRVAR(s_biases_doc,
+"Bias to the output units of this linear machine, to be added\n\
+to the output before activation.\n\
+");
+
+static PyObject* PyBobMachineLinear_getBiases
+(PyBobMachineLinearObject* self, void* /*closure*/) {
+  return PyBlitzArray_NUMPY_WRAP(PyBlitzArrayCxx_NewFromConstArray(self->machine->getBiases()));
+}
+
+static int PyBobMachineLinear_setBiases (PyBobMachineLinearObject* self,
+    PyObject* o, void* /*closure*/) {
+
+  PyBlitzArrayObject* biases = 0;
+  if (!PyBlitzArray_Converter(o, &biases)) return -1;
+  auto biases_ = make_safe(biases);
+
+  if (biases->type_num != NPY_FLOAT64 || biases->ndim != 1) {
+    PyErr_SetString(PyExc_TypeError, "LinearMachine only supports 64-bit floats 1D arrays for property array `biases'");
+    return -1;
+  }
+
+  try {
+    self->machine->setBiases(*PyBlitzArrayCxx_AsBlitz<double,1>(biases));
+  }
+  catch (std::exception& ex) {
+    PyErr_SetString(PyExc_RuntimeError, ex.what());
+    return -1;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `biases' of %s: unknown exception caught", s_linear_str);
+    return -1;
+  }
+
+  return 0;
+
+}
+
+PyDoc_STRVAR(s_input_subtract_str, "input_subtract");
+PyDoc_STRVAR(s_input_subtract_doc,
+"Input subtraction factor, before feeding data through the\n\
+weight matrix W. The subtraction is the first applied\n\
+operation in the processing chain - by default, it is set to\n\
+0.0.\n\
+");
+
+static PyObject* PyBobMachineLinear_getInputSubtraction
+(PyBobMachineLinearObject* self, void* /*closure*/) {
+  return PyBlitzArray_NUMPY_WRAP(PyBlitzArrayCxx_NewFromConstArray(self->machine->getInputSubtraction()));
+}
+
+static int PyBobMachineLinear_setInputSubtraction
+(PyBobMachineLinearObject* self, PyObject* o, void* /*closure*/) {
+
+  PyBlitzArrayObject* input_subtract = 0;
+  if (!PyBlitzArray_Converter(o, &input_subtract)) return -1;
+  auto input_subtract_ = make_safe(input_subtract);
+
+  if (input_subtract->type_num != NPY_FLOAT64 || input_subtract->ndim != 1) {
+    PyErr_SetString(PyExc_TypeError, "LinearMachine only supports 64-bit floats 1D arrays for property array `input_subtract'");
+    return -1;
+  }
+
+  try {
+    self->machine->setInputSubtraction(*PyBlitzArrayCxx_AsBlitz<double,1>(input_subtract));
+  }
+  catch (std::exception& ex) {
+    PyErr_SetString(PyExc_RuntimeError, ex.what());
+    return -1;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `input_subtract' of %s: unknown exception caught", s_linear_str);
+    return -1;
+  }
+
+  return 0;
+
+}
+
+PyDoc_STRVAR(s_input_divide_str, "input_divide");
+PyDoc_STRVAR(s_input_divide_doc,
+"Input division factor, before feeding data through the\n\
+weight matrix W. The division is applied just after\n\
+subtraction - by default, it is set to 1.0.\n\
+");
+
+static PyObject* PyBobMachineLinear_getInputDivision
+(PyBobMachineLinearObject* self, void* /*closure*/) {
+  return PyBlitzArray_NUMPY_WRAP(PyBlitzArrayCxx_NewFromConstArray(self->machine->getInputDivision()));
+}
+
+static int PyBobMachineLinear_setInputDivision (PyBobMachineLinearObject* self,
+    PyObject* o, void* /*closure*/) {
+
+  PyBlitzArrayObject* input_divide = 0;
+  if (!PyBlitzArray_Converter(o, &input_divide)) return -1;
+  auto input_divide_ = make_safe(input_divide);
+
+  if (input_divide->type_num != NPY_FLOAT64 || input_divide->ndim != 1) {
+    PyErr_SetString(PyExc_TypeError, "LinearMachine only supports 64-bit floats 1D arrays for property array `input_divide'");
+    return -1;
+  }
+
+  try {
+    self->machine->setInputDivision(*PyBlitzArrayCxx_AsBlitz<double,1>(input_divide));
+  }
+  catch (std::exception& ex) {
+    PyErr_SetString(PyExc_RuntimeError, ex.what());
+    return -1;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `input_divide' of %s: unknown exception caught", s_linear_str);
+    return -1;
+  }
+
+  return 0;
+
+}
+
+PyDoc_STRVAR(s_shape_str, "shape");
+PyDoc_STRVAR(s_shape_doc,
+"A tuple that represents the size of the input vector\n\
+followed by the size of the output vector in the format\n\
+``(input, output)``.\n\
+");
+
+static PyObject* PyBobMachineLinear_getShape
+(PyBobMachineLinearObject* self, void* /*closure*/) {
+  return Py_BuildValue("(nn)", self->machine->inputSize(),
+      self->machine->outputSize());
+}
+
+static int PyBobMachineLinear_setShape (PyBobMachineLinearObject* self,
+    PyObject* o, void* /*closure*/) {
+
+  if (!PySequence_Check(o)) {
+    PyErr_Format(PyExc_TypeError, "LinearMachine shape can only be set using tuples (or sequences), not `%s'", o->ob_type->tp_name);
+    return -1;
+  }
+
+  PyObject* shape = PySequence_Tuple(o);
+  auto shape_ = make_safe(shape);
+
+  if (PyTuple_GET_SIZE(shape) != 2) {
+    PyErr_Format(PyExc_RuntimeError, "LinearMachine shape can only be set using  2-position tuples (or sequences), not an %" PY_FORMAT_SIZE_T "d-position sequence", PyTuple_GET_SIZE(shape));
+    return -1;
+  }
+
+  Py_ssize_t in = PyNumber_AsSsize_t(PyTuple_GET_ITEM(shape, 0), PyExc_OverflowError);
+  if (PyErr_Occurred()) return -1;
+  Py_ssize_t out = PyNumber_AsSsize_t(PyTuple_GET_ITEM(shape, 1), PyExc_OverflowError);
+  if (PyErr_Occurred()) return -1;
+
+  try {
+    self->machine->resize(in, out);
+  }
+  catch (std::exception& ex) {
+    PyErr_SetString(PyExc_RuntimeError, ex.what());
+    return -1;
+  }
+  catch (...) {
+    PyErr_Format(PyExc_RuntimeError, "cannot reset `shape' of %s: unknown exception caught", s_linear_str);
+    return -1;
+  }
+
+  return 0;
+
+}
+
+static PyGetSetDef PyBobMachineLinear_getseters[] = {
+    {
+      s_weights_str,
+      (getter)PyBobMachineLinear_getWeights,
+      (setter)PyBobMachineLinear_setWeights,
+      s_weights_doc,
+      0
+    },
+    {
+      s_biases_str,
+      (getter)PyBobMachineLinear_getBiases,
+      (setter)PyBobMachineLinear_setBiases,
+      s_biases_doc,
+      0
+    },
+    {
+      s_input_subtract_str,
+      (getter)PyBobMachineLinear_getInputSubtraction,
+      (setter)PyBobMachineLinear_setInputSubtraction,
+      s_input_subtract_doc,
+      0
+    },
+    {
+      s_input_divide_str,
+      (getter)PyBobMachineLinear_getInputDivision,
+      (setter)PyBobMachineLinear_setInputDivision,
+      s_input_divide_doc,
+      0
+    },
+    {
+      s_shape_str,
+      (getter)PyBobMachineLinear_getShape,
+      (setter)PyBobMachineLinear_setShape,
+      s_shape_doc,
+      0
+    },
+    {0}  /* Sentinel */
+};
+
 PyTypeObject PyBobMachineLinear_Type = {
     PyObject_HEAD_INIT(0)
     0,                                           /* ob_size */
@@ -256,7 +544,7 @@ PyTypeObject PyBobMachineLinear_Type = {
     0,                                           /* tp_as_mapping */
     0,                                           /* tp_hash */
     0, //(ternaryfunc)PyBobMachineLinear_call,        /* tp_call */
-    0, //(reprfunc)PyBobMachineLinear_Str,            /* tp_str */
+    0,                                           /* tp_str */
     0,                                           /* tp_getattro */
     0,                                           /* tp_setattro */
     0,                                           /* tp_as_buffer */
@@ -264,13 +552,13 @@ PyTypeObject PyBobMachineLinear_Type = {
     s_linear_doc,                                /* tp_doc */
     0,                                           /* tp_traverse */
     0,                                           /* tp_clear */
-    0, //(richcmpfunc)PyBobMachineLinear_RichCompare, /* tp_richcompare */
+    (richcmpfunc)PyBobMachineLinear_RichCompare, /* tp_richcompare */
     0,                                           /* tp_weaklistoffset */
     0,                                           /* tp_iter */
     0,                                           /* tp_iternext */
-    0, //PyBobMachineLinear_methods,                  /* tp_methods */
+    PyBobMachineLinear_methods,                  /* tp_methods */
     0,                                           /* tp_members */
-    0,                                           /* tp_getset */
+    PyBobMachineLinear_getseters,                /* tp_getset */
     0,                                           /* tp_base */
     0,                                           /* tp_dict */
     0,                                           /* tp_descr_get */
@@ -341,106 +629,13 @@ static void forward2(const bob::machine::LinearMachine& m,
       PYTHON_ERROR(TypeError, "cannot forward arrays with "  SIZE_T_FMT " dimensions (only with 1 or 2 dimensions).", info.nd);
   }
 }
-
-static tuple get_shape(const bob::machine::LinearMachine& m) {
-  return make_tuple(m.inputSize(), m.outputSize());
-}
-
-static void set_shape(bob::machine::LinearMachine& m,
-    const blitz::TinyVector<int,2>& s) {
-  m.resize(s(0), s(1));
-}
-
-static void set_input_sub(bob::machine::LinearMachine& m, object o) {
-  extract<int> int_check(o);
-  extract<double> float_check(o);
-  if (int_check.check()) { //is int
-    m.setInputSubtraction(int_check());
-  }
-  else if (float_check.check()) { //is float
-    m.setInputSubtraction(float_check());
-  }
-  else {
-    //try hard-core extraction - throws TypeError, if not possible
-    extract<bob::python::const_ndarray> array_check(o);
-    if (!array_check.check())
-      PYTHON_ERROR(TypeError, "Cannot extract an array from this Python object");
-    bob::python::const_ndarray ar = array_check();
-    m.setInputSubtraction(ar.bz<double,1>());
-  }
-}
-
-static void set_input_div(bob::machine::LinearMachine& m, object o) {
-  extract<int> int_check(o);
-  extract<double> float_check(o);
-  if (int_check.check()) { //is int
-    m.setInputDivision(int_check());
-  }
-  else if (float_check.check()) { //is float
-    m.setInputDivision(float_check());
-  }
-  else {
-    //try hard-core extraction - throws TypeError, if not possible
-    extract<bob::python::const_ndarray> array_check(o);
-    if (!array_check.check())
-      PYTHON_ERROR(TypeError, "Cannot extract an array from this Python object");
-    bob::python::const_ndarray ar = array_check();
-    m.setInputDivision(ar.bz<double,1>());
-  }
-}
-
-static void set_weight(bob::machine::LinearMachine& m, object o) {
-  extract<int> int_check(o);
-  extract<double> float_check(o);
-  if (int_check.check()) { //is int
-    m.setWeights(int_check());
-  }
-  else if (float_check.check()) { //is float
-    m.setWeights(float_check());
-  }
-  else {
-    //try hard-core extraction - throws TypeError, if not possible
-    extract<bob::python::const_ndarray> array_check(o);
-    if (!array_check.check())
-      PYTHON_ERROR(TypeError, "Cannot extract an array from this Python object");
-    bob::python::const_ndarray ar = array_check();
-    m.setWeights(ar.bz<double,2>());
-  }
-}
-
-static void set_bias(bob::machine::LinearMachine& m, object o) {
-  extract<int> int_check(o);
-  extract<double> float_check(o);
-  if (int_check.check()) { //is int
-    m.setBiases(int_check());
-  }
-  else if (float_check.check()) { //is float
-    m.setBiases(float_check());
-  }
-  else {
-    //try hard-core extraction - throws TypeError, if not possible
-    extract<bob::python::const_ndarray> array_check(o);
-    if (!array_check.check())
-      PYTHON_ERROR(TypeError, "Cannot extract an array from this Python object");
-    bob::python::const_ndarray ar = array_check();
-    m.setBiases(ar.bz<double,1>());
-  }
-}
 ***/
 
 /***
 void bind_machine_linear() {
-    .def(self == self)
-    .def(self != self)
     .def("is_similar_to", &bob::machine::LinearMachine::is_similar_to, (arg("self"), arg("other"), arg("r_epsilon")=1e-5, arg("a_epsilon")=1e-8), "Compares this LinearMachine with the 'other' one to be approximately the same.")
     .def("load", &bob::machine::LinearMachine::load, (arg("self"), arg("config")), "Loads the weights and biases from a configuration file. Both weights and biases have their dimensionalities checked between each other for consistency.")
     .def("save", &bob::machine::LinearMachine::save, (arg("self"), arg("config")), "Saves the weights and biases to a configuration file.")
-    .add_property("input_subtract", make_function(&bob::machine::LinearMachine::getInputSubtraction, return_value_policy<copy_const_reference>()), &set_input_sub, "Input subtraction factor, before feeding data through the weight matrix W. The subtraction is the first applied operation in the processing chain - by default, it is set to 0.0.")
-    .add_property("input_divide", make_function(&bob::machine::LinearMachine::getInputDivision, return_value_policy<copy_const_reference>()), &set_input_div, "Input division factor, before feeding data through the weight matrix W. The division is applied just after subtraction - by default, it is set to 1.0")
-    .add_property("weights", make_function(&bob::machine::LinearMachine::getWeights, return_value_policy<copy_const_reference>()), &set_weight, "Weight matrix W to which the input is projected to. The output of the project is fed subject to bias and activation before being output.")
-    .add_property("biases", make_function(&bob::machine::LinearMachine::getBiases, return_value_policy<copy_const_reference>()), &set_bias, "Bias to the output units of this linear machine, to be added to the output before activation.")
-    .add_property("activation", &bob::machine::LinearMachine::getActivation, &bob::machine::LinearMachine::setActivation, "The activation function - by default, the identity function. The output provided by the activation function is passed, unchanged, to the user.")
-    .add_property("shape", &get_shape, &set_shape, "A tuple that represents the size of the input vector followed by the size of the output vector in the format ``(input, output)``.")
     .def("resize", &bob::machine::LinearMachine::resize, (arg("self"), arg("input"), arg("output")), "Resizes the machine. If either the input or output increases in size, the weights and other factors should be considered uninitialized. If the size is preserved or reduced, already initialized values will not be changed.\n\nTip: Use this method to force data compression. All will work out given most relevant factors to be preserved are organized on the top of the weight matrix. In this way, reducing the system size will supress less relevant projections.")
     .def("__call__", &forward2, (arg("self"), arg("input"), arg("output")), "Projects the input to the weights and biases and saves results on the output")
     .def("forward", &forward2, (arg("self"), arg("input"), arg("output")), "Projects the input to the weights and biases and saves results on the output")
