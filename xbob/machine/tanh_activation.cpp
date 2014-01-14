@@ -59,7 +59,7 @@ static void PyBobMachineHyperbolicTangentActivation_delete
 PyTypeObject PyBobMachineHyperbolicTangentActivation_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                  /*ob_size*/
-    0,                                                  /*tp_name*/
+    s_hyperbolictangentactivation_str,                  /*tp_name*/
     sizeof(PyBobMachineHyperbolicTangentActivationObject),  /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
     (destructor)PyBobMachineHyperbolicTangentActivation_delete, /*tp_dealloc*/

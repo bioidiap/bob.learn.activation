@@ -58,7 +58,7 @@ static void PyBobMachineIdentityActivation_delete
 PyTypeObject PyBobMachineIdentityActivation_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                  /*ob_size*/
-    0,                                                  /*tp_name*/
+    s_identityactivation_str,                           /*tp_name*/
     sizeof(PyBobMachineIdentityActivationObject),       /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
     (destructor)PyBobMachineIdentityActivation_delete,  /*tp_dealloc*/

@@ -26,7 +26,7 @@ static int PyBobMachineLinearActivation_init
 (PyBobMachineLinearActivationObject* self, PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
-  static const char* const_kwlist[] = {0};
+  static const char* const_kwlist[] = {"C", 0};
   static char** kwlist = const_cast<char**>(const_kwlist);
 
   double C = 1.0;
@@ -87,7 +87,7 @@ static PyGetSetDef PyBobMachineLinearActivation_getseters[] = {
 PyTypeObject PyBobMachineLinearActivation_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                  /*ob_size*/
-    0,                                                  /*tp_name*/
+    s_linearactivation_str,                             /*tp_name*/
     sizeof(PyBobMachineLinearActivationObject),         /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
     (destructor)PyBobMachineLinearActivation_delete,    /*tp_dealloc*/

@@ -1,4 +1,6 @@
 from ._library import *
+from ._library import __version__, __api_version__
+from . import _externals
 
 #from . import __linear__
 #from . import __mlp__

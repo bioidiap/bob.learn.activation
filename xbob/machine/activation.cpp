@@ -143,7 +143,7 @@ static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
     }
 
     Py_INCREF(res);
-    return res;
+    return PyBlitzArray_NUMPY_WRAP(res);
 
   }
 
@@ -220,7 +220,7 @@ static PyObject* PyBobMachineActivation_call2(PyBobMachineActivationObject* o,
   }
 
   Py_INCREF(res);
-  return reinterpret_cast<PyObject*>(res);
+  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(res));
 
 }
 

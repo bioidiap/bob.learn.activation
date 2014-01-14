@@ -58,7 +58,7 @@ static void PyBobMachineLogisticActivation_delete
 PyTypeObject PyBobMachineLogisticActivation_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                  /*ob_size*/
-    0,                                                  /*tp_name*/
+    s_logisticactivation_str,                           /*tp_name*/
     sizeof(PyBobMachineLogisticActivationObject),       /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
     (destructor)PyBobMachineLogisticActivation_delete,  /*tp_dealloc*/

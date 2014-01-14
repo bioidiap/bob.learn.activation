@@ -28,7 +28,7 @@ static int PyBobMachineMultipliedHyperbolicTangentActivation_init
 (PyBobMachineMultipliedHyperbolicTangentActivationObject* self, PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
-  static const char* const_kwlist[] = {0};
+  static const char* const_kwlist[] = {"C", "M", 0};
   static char** kwlist = const_cast<char**>(const_kwlist);
 
   double C = 1.0;
@@ -113,7 +113,7 @@ static PyGetSetDef PyBobMachineMultipliedHyperbolicTangentActivation_getseters[]
 PyTypeObject PyBobMachineMultipliedHyperbolicTangentActivation_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                  /*ob_size*/
-    0,                                                  /*tp_name*/
+    s_multtanhactivation_str,                           /*tp_name*/
     sizeof(PyBobMachineMultipliedHyperbolicTangentActivationObject),       /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
     (destructor)PyBobMachineMultipliedHyperbolicTangentActivation_delete,  /*tp_dealloc*/

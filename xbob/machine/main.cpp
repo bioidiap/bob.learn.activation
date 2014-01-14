@@ -27,21 +27,23 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
   PyBobMachineActivation_Type.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyBobMachineActivation_Type) < 0) return;
 
-  PyBobMachineIdentityActivation_Type.tp_new = PyType_GenericNew;
+  PyBobMachineIdentityActivation_Type.tp_base = &PyBobMachineActivation_Type;
   if (PyType_Ready(&PyBobMachineIdentityActivation_Type) < 0) return;
 
-  PyBobMachineLinearActivation_Type.tp_new = PyType_GenericNew;
+  PyBobMachineLinearActivation_Type.tp_base = &PyBobMachineActivation_Type;
   if (PyType_Ready(&PyBobMachineLinearActivation_Type) < 0) return;
 
-  PyBobMachineLogisticActivation_Type.tp_new = PyType_GenericNew;
+  PyBobMachineLogisticActivation_Type.tp_base = &PyBobMachineActivation_Type;
   if (PyType_Ready(&PyBobMachineLogisticActivation_Type) < 0) return;
 
-  PyBobMachineHyperbolicTangentActivation_Type.tp_new = PyType_GenericNew;
+  PyBobMachineHyperbolicTangentActivation_Type.tp_base =
+    &PyBobMachineActivation_Type;
   if (PyType_Ready(&PyBobMachineHyperbolicTangentActivation_Type) < 0) return;
 
-  PyBobMachineMultipliedHyperbolicTangentActivation_Type.tp_new =
-    PyType_GenericNew;
-  if (PyType_Ready(&PyBobMachineMultipliedHyperbolicTangentActivation_Type) < 0) return;
+  PyBobMachineMultipliedHyperbolicTangentActivation_Type.tp_base =
+    &PyBobMachineActivation_Type;
+  if (PyType_Ready(&PyBobMachineMultipliedHyperbolicTangentActivation_Type) < 0)
+    return;
 
   PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, library_methods, library_docstr);
 
