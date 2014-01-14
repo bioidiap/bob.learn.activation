@@ -53,9 +53,10 @@ setup(
       Extension("xbob.machine._library",
         [
           "xbob/machine/activation.cpp",
-          "xbob/machine/identity.cpp",
-          "xbob/machine/tanh.cpp",
-          "xbob/machine/logistic.cpp",
+          "xbob/machine/identity_activation.cpp",
+          "xbob/machine/tanh_activation.cpp",
+          "xbob/machine/logistic_activation.cpp",
+          "xbob/machine/linear_activation.cpp",
           "xbob/machine/main.cpp",
           ],
         packages = packages,
