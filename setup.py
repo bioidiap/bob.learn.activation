@@ -54,9 +54,10 @@ setup(
         [
           "xbob/machine/activation.cpp",
           "xbob/machine/identity_activation.cpp",
-          "xbob/machine/tanh_activation.cpp",
-          "xbob/machine/logistic_activation.cpp",
           "xbob/machine/linear_activation.cpp",
+          "xbob/machine/logistic_activation.cpp",
+          "xbob/machine/tanh_activation.cpp",
+          "xbob/machine/mult_tanh_activation.cpp",
           "xbob/machine/main.cpp",
           ],
         packages = packages,
