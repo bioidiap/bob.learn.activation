@@ -2,9 +2,9 @@
 .. Andre Anjos <andre.anjos@idiap.ch>
 .. Fri 13 Dec 2013 12:35:22 CET
 
-==========================================
- Python bindings for bob.learn.activation
-==========================================
+=======================================================
+ Python bindings for bob.machine's Activation functors
+=======================================================
 
 This package contains a set of Pythonic bindings for Bob's machine Activation
 functors.
