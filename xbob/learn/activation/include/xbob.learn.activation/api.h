@@ -253,14 +253,14 @@ typedef struct {
     }
 #   else
     if (PyCObject_Check(c_api_object)) {
-      XbobLearnActivation_API = (void **)PyCObject_AsVoidPtr(c_api_object);
+      PyXbobLearnActivation_API = (void **)PyCObject_AsVoidPtr(c_api_object);
     }
 #   endif
 
     Py_DECREF(c_api_object);
     Py_DECREF(module);
 
-    if (!XbobLearnActivation_API) {
+    if (!PyXbobLearnActivation_API) {
       PyErr_Format(PyExc_ImportError,
 #   if PY_VERSION_HEX >= 0x02070000
           "cannot find C/C++ API capsule at `%s.%s._C_API'",
