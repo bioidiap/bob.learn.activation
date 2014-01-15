@@ -10,7 +10,7 @@ import xbob.io
 
 import os
 package_dir = os.path.dirname(os.path.realpath(__file__))
-package_dir = os.path.join(package_dir, 'xbob', 'machine', 'include')
+package_dir = os.path.join(package_dir, 'xbob', 'learn', 'activation', 'include')
 include_dirs = [package_dir, xbob.io.get_include()]
 
 packages = ['bob-machine >= 1.3']
@@ -18,10 +18,10 @@ version = '2.0.0a0'
 
 setup(
 
-    name='xbob.machine',
+    name='xbob.learn.activation',
     version=version,
-    description='Bindings for bob.machine',
-    url='http://github.com/anjos/xbob.machine',
+    description='Bindings for bob.machine\'s Activation functors',
+    url='http://github.com/anjos/xbob.learn.activation',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
@@ -39,38 +39,25 @@ setup(
 
     namespace_packages=[
       "xbob",
+      "xbob.learn",
       ],
 
     ext_modules = [
-      Extension("xbob.machine._externals",
+      Extension("xbob.learn.activation._library",
         [
-          "xbob/machine/externals.cpp",
-          ],
-        packages = packages,
-        include_dirs = include_dirs,
-        version = version,
-        ),
-      Extension("xbob.machine._library",
-        [
-          "xbob/machine/activation.cpp",
-          "xbob/machine/identity_activation.cpp",
-          "xbob/machine/linear_activation.cpp",
-          "xbob/machine/logistic_activation.cpp",
-          "xbob/machine/tanh_activation.cpp",
-          "xbob/machine/mult_tanh_activation.cpp",
-          "xbob/machine/linear.cpp",
-          "xbob/machine/main.cpp",
+          "xbob/learn/activation/activation.cpp",
+          "xbob/learn/activation/identity.cpp",
+          "xbob/learn/activation/linear.cpp",
+          "xbob/learn/activation/logistic.cpp",
+          "xbob/learn/activation/tanh.cpp",
+          "xbob/learn/activation/mult_tanh.cpp",
+          "xbob/learn/activation/main.cpp",
           ],
         packages = packages,
         include_dirs = include_dirs,
         version = version,
         ),
       ],
-
-    entry_points={
-      'console_scripts': [
-        ],
-      },
 
     classifiers = [
       'Development Status :: 3 - Alpha',

@@ -2,39 +2,44 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Mon 13 Jan 2014 17:25:32 CET
  *
- * @brief Implementation of the Identity Activation function
+ * @brief Implementation of the Linear Activation function
  */
 
-#define XBOB_MACHINE_MODULE
-#include <xbob.machine/api.h>
+#define XBOB_LEARN_ACTIVATION_MODULE
+#include <xbob.learn.activation/api.h>
 
-PyDoc_STRVAR(s_identityactivation_str,
-    XBOB_EXT_MODULE_PREFIX ".IdentityActivation");
+PyDoc_STRVAR(s_linearactivation_str, XBOB_EXT_MODULE_PREFIX ".Linear");
 
-PyDoc_STRVAR(s_identityactivation_doc,
-"IdentityActivation() -> new IdentityActivation\n\
+PyDoc_STRVAR(s_linearactivation_doc,
+"Linear([C=1.0]) -> new linear activation functor\n\
 \n\
-Computes :math:`f(z) = z` as activation function.\n\
+Computes :math:`f(z) = C \\cdot z` as activation function.\n\
 \n\
+The constructor builds a new linear activation function\n\
+with a given constant. Don't use this if you just want to\n\
+set constant to the default value (1.0). In such a case,\n\
+prefer to use the more efficient :py:class:`IdentityActivation`.\n\
 ");
 
-static int PyBobMachineIdentityActivation_init
-(PyBobMachineIdentityActivationObject* self, PyObject* args, PyObject* kwds) {
+static int PyBobLearnLinearActivation_init
+(PyBobLearnLinearActivationObject* self, PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
-  static const char* const_kwlist[] = {0};
+  static const char* const_kwlist[] = {"C", 0};
   static char** kwlist = const_cast<char**>(const_kwlist);
 
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "", kwlist)) return -1;
+  double C = 1.0;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwds, "|d", kwlist, &C)) return -1;
 
   try {
-    self->base = new bob::machine::IdentityActivation();
+    self->base = new bob::machine::LinearActivation(C);
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", s_identityactivation_str);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", s_linearactivation_str);
   }
 
   self->parent.base = self->base;
@@ -45,8 +50,8 @@ static int PyBobMachineIdentityActivation_init
 
 }
 
-static void PyBobMachineIdentityActivation_delete
-(PyBobMachineIdentityActivationObject* self) {
+static void PyBobLearnLinearActivation_delete
+(PyBobLearnLinearActivationObject* self) {
 
   delete self->base;
   self->parent.base = 0;
@@ -55,13 +60,36 @@ static void PyBobMachineIdentityActivation_delete
 
 }
 
-PyTypeObject PyBobMachineIdentityActivation_Type = {
+PyDoc_STRVAR(s_C_str, "C");
+PyDoc_STRVAR(s_C_doc,
+"The multiplication factor for the linear function (read-only)"
+);
+
+static PyObject* PyBobLearnLinearActivation_C
+(PyBobLearnLinearActivationObject* self) {
+
+  return Py_BuildValue("d", self->base->C());
+
+}
+
+static PyGetSetDef PyBobLearnLinearActivation_getseters[] = {
+    {
+      s_C_str,
+      (getter)PyBobLearnLinearActivation_C,
+      0,
+      s_C_doc,
+      0
+    },
+    {0}  /* Sentinel */
+};
+
+PyTypeObject PyBobLearnLinearActivation_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                  /*ob_size*/
-    s_identityactivation_str,                           /*tp_name*/
-    sizeof(PyBobMachineIdentityActivationObject),       /*tp_basicsize*/
+    s_linearactivation_str,                             /*tp_name*/
+    sizeof(PyBobLearnLinearActivationObject),           /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
-    (destructor)PyBobMachineIdentityActivation_delete,  /*tp_dealloc*/
+    (destructor)PyBobLearnLinearActivation_delete,      /*tp_dealloc*/
     0,                                                  /*tp_print*/
     0,                                                  /*tp_getattr*/
     0,                                                  /*tp_setattr*/
@@ -77,7 +105,7 @@ PyTypeObject PyBobMachineIdentityActivation_Type = {
     0,                                                  /*tp_setattro*/
     0,                                                  /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,           /*tp_flags*/
-    s_identityactivation_doc,                           /* tp_doc */
+    s_linearactivation_doc,                             /* tp_doc */
     0,		                                              /* tp_traverse */
     0,		                                              /* tp_clear */
     0,                                                  /* tp_richcompare */
@@ -86,13 +114,13 @@ PyTypeObject PyBobMachineIdentityActivation_Type = {
     0,		                                              /* tp_iternext */
     0,                                                  /* tp_methods */
     0,                                                  /* tp_members */
-    0,                                                  /* tp_getset */
+    PyBobLearnLinearActivation_getseters,               /* tp_getset */
     0,                                                  /* tp_base */
     0,                                                  /* tp_dict */
     0,                                                  /* tp_descr_get */
     0,                                                  /* tp_descr_set */
     0,                                                  /* tp_dictoffset */
-    (initproc)PyBobMachineIdentityActivation_init,      /* tp_init */
+    (initproc)PyBobLearnLinearActivation_init,          /* tp_init */
     0,                                                  /* tp_alloc */
     0,                                                  /* tp_new */
 };

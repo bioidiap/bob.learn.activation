@@ -4,13 +4,13 @@
 ..
 .. Copyright (C) 2011-2013 Idiap Research Institute, Martigny, Switzerland
 
-==============
- Bob Machines
-==============
+=========================
+ Bob Activation Functors
+=========================
 
-This module contains base functionality from Bob bound to Python, available in
-the C++ counter-part ``bob::machine``. It includes machines from our Machine
-Learning core.
+This module contains some functionality from Bob bound to Python, available in
+the C++ counter-part ``bob::machine``. It includes Activation functors from the
+Machine Learning core.
 
 Reference
 ---------
@@ -18,7 +18,6 @@ Reference
 .. toctree::
    :maxdepth: 2
 
-   guide
    py_api
    c_cpp_api
 

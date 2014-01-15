@@ -7,9 +7,9 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#define XBOB_MACHINE_MODULE
+#define XBOB_LEARN_ACTIVATION_MODULE
 #include "cleanup.h"
-#include <xbob.machine/api.h>
+#include <xbob.learn.activation/api.h>
 #include <xbob.io/api.h>
 #include <xbob.blitz/cppapi.h>
 #include <bob/machine/Activation.h>
@@ -24,7 +24,7 @@
 PyDoc_STRVAR(s_activation_str, XBOB_EXT_MODULE_PREFIX ".Activation");
 
 PyDoc_STRVAR(s_activation_doc,
-"Base class for activation functions (actually, *functors*).\n\
+"Base class for activation functors.\n\
 \n\
 .. warning::\n\
 \n\
@@ -43,7 +43,8 @@ PyDoc_STRVAR(s_activation_doc,
 \n\
 ");
 
-static int PyBobMachineActivation_init(PyBobMachineActivationObject* self, PyObject*, PyObject*) {
+static int PyBobLearnActivation_init(PyBobLearnActivationObject* self,
+    PyObject*, PyObject*) {
 
   PyErr_Format(PyExc_NotImplementedError, "cannot initialize object of base type `%s' - use one of the inherited classes", s_activation_str);
   return -1;
@@ -98,7 +99,7 @@ static int apply(boost::function<double (double)> function,
 
 }
 
-static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
+static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* o,
     double (bob::machine::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
 
@@ -162,7 +163,7 @@ static PyObject* PyBobMachineActivation_call1(PyBobMachineActivationObject* o,
 
 }
 
-static PyObject* PyBobMachineActivation_call2(PyBobMachineActivationObject* o,
+static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* o,
     double (bob::machine::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
 
@@ -248,7 +249,7 @@ error otherwise.\n\
 \n\
 ");
 
-static PyObject* PyBobMachineActivation_call(PyBobMachineActivationObject* o,
+static PyObject* PyBobLearnActivation_call(PyBobLearnActivationObject* o,
   PyObject* args, PyObject* kwds) {
 
   Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
@@ -256,12 +257,12 @@ static PyObject* PyBobMachineActivation_call(PyBobMachineActivationObject* o,
   switch (nargs) {
 
     case 1:
-      return PyBobMachineActivation_call1
+      return PyBobLearnActivation_call1
         (o, &bob::machine::Activation::f, args, kwds);
       break;
 
     case 2:
-      return PyBobMachineActivation_call2
+      return PyBobLearnActivation_call2
         (o, &bob::machine::Activation::f, args, kwds);
       break;
 
@@ -300,7 +301,7 @@ error otherwise.\n\
 \n\
 ");
 
-static PyObject* PyBobMachineActivation_f_prime(PyBobMachineActivationObject* o,
+static PyObject* PyBobLearnActivation_f_prime(PyBobLearnActivationObject* o,
   PyObject* args, PyObject* kwds) {
 
   Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
@@ -308,12 +309,12 @@ static PyObject* PyBobMachineActivation_f_prime(PyBobMachineActivationObject* o,
   switch (nargs) {
 
     case 1:
-      return PyBobMachineActivation_call1
+      return PyBobLearnActivation_call1
         (o, &bob::machine::Activation::f_prime, args, kwds);
       break;
 
     case 2:
-      return PyBobMachineActivation_call2
+      return PyBobLearnActivation_call2
         (o, &bob::machine::Activation::f_prime, args, kwds);
       break;
 
@@ -352,7 +353,7 @@ error otherwise.\n\
 \n\
 ");
 
-static PyObject* PyBobMachineActivation_f_prime_from_f(PyBobMachineActivationObject* o,
+static PyObject* PyBobLearnActivation_f_prime_from_f(PyBobLearnActivationObject* o,
   PyObject* args, PyObject* kwds) {
 
   Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
@@ -360,12 +361,12 @@ static PyObject* PyBobMachineActivation_f_prime_from_f(PyBobMachineActivationObj
   switch (nargs) {
 
     case 1:
-      return PyBobMachineActivation_call1
+      return PyBobLearnActivation_call1
         (o, &bob::machine::Activation::f_prime_from_f, args, kwds);
       break;
 
     case 2:
-      return PyBobMachineActivation_call2
+      return PyBobLearnActivation_call2
         (o, &bob::machine::Activation::f_prime_from_f, args, kwds);
       break;
 
@@ -388,7 +389,7 @@ in connection with the Activation registry.\n\
 \n\
 ");
 
-static PyObject* PyBobMachineActivation_UniqueIdentifier (PyBobMachineActivationObject* o) {
+static PyObject* PyBobLearnActivation_UniqueIdentifier (PyBobLearnActivationObject* o) {
   return Py_BuildValue("s", o->base->unique_identifier().c_str());
 }
 
@@ -400,7 +401,7 @@ Loads itself from a :py:class:`xbob.io.HDF5File`\n\
 \n\
 ");
 
-static PyObject* PyBobMachineActivation_Load(PyBobMachineActivationObject* o,
+static PyObject* PyBobLearnActivation_Load(PyBobLearnActivationObject* o,
     PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
@@ -434,7 +435,7 @@ Loads itself from a :py:class:`xbob.io.HDF5File`\n\
 \n\
 ");
 
-static PyObject* PyBobMachineActivation_Save(PyBobMachineActivationObject* o,
+static PyObject* PyBobLearnActivation_Save(PyBobLearnActivationObject* o,
     PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
@@ -460,59 +461,59 @@ static PyObject* PyBobMachineActivation_Save(PyBobMachineActivationObject* o,
   Py_RETURN_NONE;
 }
 
-static PyMethodDef PyBobMachineActivation_methods[] = {
+static PyMethodDef PyBobLearnActivation_methods[] = {
   {
     s_call_str,
-    (PyCFunction)PyBobMachineActivation_call,
+    (PyCFunction)PyBobLearnActivation_call,
     METH_VARARGS|METH_KEYWORDS,
     s_call_doc
   },
   {
     s_f_prime_str,
-    (PyCFunction)PyBobMachineActivation_f_prime,
+    (PyCFunction)PyBobLearnActivation_f_prime,
     METH_VARARGS|METH_KEYWORDS,
     s_f_prime_doc
   },
   {
     s_f_prime_from_f_str,
-    (PyCFunction)PyBobMachineActivation_f_prime_from_f,
+    (PyCFunction)PyBobLearnActivation_f_prime_from_f,
     METH_VARARGS|METH_KEYWORDS,
     s_f_prime_from_f_doc
   },
   {
     s_unique_id_str,
-    (PyCFunction)PyBobMachineActivation_UniqueIdentifier,
+    (PyCFunction)PyBobLearnActivation_UniqueIdentifier,
     METH_NOARGS,
     s_unique_id_doc
   },
   {
     s_load_str,
-    (PyCFunction)PyBobMachineActivation_Load,
+    (PyCFunction)PyBobLearnActivation_Load,
     METH_O,
     s_load_doc
   },
   {
     s_save_str,
-    (PyCFunction)PyBobMachineActivation_Save,
+    (PyCFunction)PyBobLearnActivation_Save,
     METH_O,
     s_save_doc
   },
   {0} /* Sentinel */
 };
 
-int PyBobMachineActivation_Check(PyObject* o) {
-  return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobMachineActivation_Type));
+int PyBobLearnActivation_Check(PyObject* o) {
+  return PyObject_IsInstance(o, reinterpret_cast<PyObject*>(&PyBobLearnActivation_Type));
 }
 
-static PyObject* PyBobMachineActivation_RichCompare (PyBobMachineActivationObject* self, PyObject* other, int op) {
+static PyObject* PyBobLearnActivation_RichCompare (PyBobLearnActivationObject* self, PyObject* other, int op) {
 
-  if (!PyBobMachineActivation_Check(other)) {
+  if (!PyBobLearnActivation_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
         s_activation_str, other->ob_type->tp_name);
     return 0;
   }
 
-  auto other_ = reinterpret_cast<PyBobMachineActivationObject*>(other);
+  auto other_ = reinterpret_cast<PyBobLearnActivationObject*>(other);
 
   switch (op) {
     case Py_EQ:
@@ -530,48 +531,48 @@ static PyObject* PyBobMachineActivation_RichCompare (PyBobMachineActivationObjec
 
 }
 
-static PyObject* PyBobMachineActivation_Str (PyBobMachineActivationObject* o) {
+static PyObject* PyBobLearnActivation_Str (PyBobLearnActivationObject* o) {
   return Py_BuildValue("s", o->base->str().c_str());
 }
 
-PyTypeObject PyBobMachineActivation_Type = {
+PyTypeObject PyBobLearnActivation_Type = {
     PyObject_HEAD_INIT(0)
-    0,                                                 /* ob_size */
-    s_activation_str,                                  /* tp_name */
-    sizeof(PyBobMachineActivationObject),              /* tp_basicsize */
-    0,                                                 /* tp_itemsize */
-    0,                                                 /* tp_dealloc */
-    0,                                                 /* tp_print */
-    0,                                                 /* tp_getattr */
-    0,                                                 /* tp_setattr */
-    0,                                                 /* tp_compare */
-    0,                                                 /* tp_repr */
-    0,                                                 /* tp_as_number */
-    0,                                                 /* tp_as_sequence */
-    0,                                                 /* tp_as_mapping */
-    0,                                                 /* tp_hash */
-    (ternaryfunc)PyBobMachineActivation_call,          /* tp_call */
-    (reprfunc)PyBobMachineActivation_Str,              /* tp_str */
-    0,                                                 /* tp_getattro */
-    0,                                                 /* tp_setattro */
-    0,                                                 /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,          /* tp_flags */
-    s_activation_doc,                                  /* tp_doc */
-    0,                                                 /* tp_traverse */
-    0,                                                 /* tp_clear */
-    (richcmpfunc)PyBobMachineActivation_RichCompare,   /* tp_richcompare */
-    0,                                                 /* tp_weaklistoffset */
-    0,                                                 /* tp_iter */
-    0,                                                 /* tp_iternext */
-    PyBobMachineActivation_methods,                    /* tp_methods */
-    0,                                                 /* tp_members */
-    0,                                                 /* tp_getset */
-    0,                                                 /* tp_base */
-    0,                                                 /* tp_dict */
-    0,                                                 /* tp_descr_get */
-    0,                                                 /* tp_descr_set */
-    0,                                                 /* tp_dictoffset */
-    (initproc)PyBobMachineActivation_init,             /* tp_init */
-    0,                                                 /* tp_alloc */
-    0,                                                 /* tp_new */
+    0,                                              /* ob_size */
+    s_activation_str,                               /* tp_name */
+    sizeof(PyBobLearnActivationObject),             /* tp_basicsize */
+    0,                                              /* tp_itemsize */
+    0,                                              /* tp_dealloc */
+    0,                                              /* tp_print */
+    0,                                              /* tp_getattr */
+    0,                                              /* tp_setattr */
+    0,                                              /* tp_compare */
+    0,                                              /* tp_repr */
+    0,                                              /* tp_as_number */
+    0,                                              /* tp_as_sequence */
+    0,                                              /* tp_as_mapping */
+    0,                                              /* tp_hash */
+    (ternaryfunc)PyBobLearnActivation_call,         /* tp_call */
+    (reprfunc)PyBobLearnActivation_Str,             /* tp_str */
+    0,                                              /* tp_getattro */
+    0,                                              /* tp_setattro */
+    0,                                              /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,       /* tp_flags */
+    s_activation_doc,                               /* tp_doc */
+    0,                                              /* tp_traverse */
+    0,                                              /* tp_clear */
+    (richcmpfunc)PyBobLearnActivation_RichCompare,  /* tp_richcompare */
+    0,                                              /* tp_weaklistoffset */
+    0,                                              /* tp_iter */
+    0,                                              /* tp_iternext */
+    PyBobLearnActivation_methods,                   /* tp_methods */
+    0,                                              /* tp_members */
+    0,                                              /* tp_getset */
+    0,                                              /* tp_base */
+    0,                                              /* tp_dict */
+    0,                                              /* tp_descr_get */
+    0,                                              /* tp_descr_set */
+    0,                                              /* tp_dictoffset */
+    (initproc)PyBobLearnActivation_init,            /* tp_init */
+    0,                                              /* tp_alloc */
+    0,                                              /* tp_new */
 };

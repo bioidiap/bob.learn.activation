@@ -7,8 +7,8 @@
 ============
 
 This section includes information for using the pure Python API of
-``xbob.machine``.
+``xbob.learn.activation``.
 
 
-.. automodule:: xbob.machine
+.. automodule:: xbob.learn.activation
 

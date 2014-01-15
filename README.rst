@@ -2,12 +2,12 @@
 .. Andre Anjos <andre.anjos@idiap.ch>
 .. Fri 13 Dec 2013 12:35:22 CET
 
-=================================
- Python bindings for bob.machine
-=================================
+==========================================
+ Python bindings for bob.learn.activation
+==========================================
 
-This package contains a set of Pythonic bindings for Bob's machine packages and
-functionality.
+This package contains a set of Pythonic bindings for Bob's machine Activation
+functors.
 
 Installation
 ------------
@@ -31,7 +31,7 @@ Testing
 
 You can run a set of tests using the nose test runner::
 
-  $ nosetests -sv xbob.machine
+  $ nosetests -sv xbob.learn.activation
 
 .. warning::
 
@@ -48,7 +48,7 @@ You can run our documentation tests using sphinx itself::
 
 You can test overall test coverage with::
 
-  $ nosetests --with-coverage --cover-package=xbob.machine
+  $ nosetests --with-coverage --cover-package=xbob.learn.activation
 
 The ``coverage`` egg must be installed for this to work properly.
 

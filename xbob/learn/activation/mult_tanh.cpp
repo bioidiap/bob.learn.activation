@@ -5,14 +5,14 @@
  * @brief Implementation of the MultipliedHyperbolicTangent Activation function
  */
 
-#define XBOB_MACHINE_MODULE
-#include <xbob.machine/api.h>
+#define XBOB_LEARN_ACTIVATION_MODULE
+#include <xbob.learn.activation/api.h>
 
 PyDoc_STRVAR(s_multtanhactivation_str,
-    XBOB_EXT_MODULE_PREFIX ".MultipliedHyperbolicTangentActivation");
+    XBOB_EXT_MODULE_PREFIX ".MultipliedHyperbolicTangent");
 
 PyDoc_STRVAR(s_multtanhactivation_doc,
-"MultipliedHyperbolicTangentActivation([C=1.0, [M=1.0]]) -> new MultipliedHyperbolicTangentActivation\n\
+"MultipliedHyperbolicTangentActivation([C=1.0, [M=1.0]]) -> new multiplied hyperbolic tangent functor\n\
 \n\
 Computes :math:`f(z) = C \\cdot \\tanh(Mz)` as activation\n\
 function.\n\
@@ -24,8 +24,8 @@ such a case, prefer to use the more efficient\n\
 :py:class:`bob.machine.HyperbolicTangentActivation`.\n\
 ");
 
-static int PyBobMachineMultipliedHyperbolicTangentActivation_init
-(PyBobMachineMultipliedHyperbolicTangentActivationObject* self, PyObject* args, PyObject* kwds) {
+static int PyBobLearnMultipliedHyperbolicTangentActivation_init
+(PyBobLearnMultipliedHyperbolicTangentActivationObject* self, PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
   static const char* const_kwlist[] = {"C", "M", 0};
@@ -55,8 +55,8 @@ static int PyBobMachineMultipliedHyperbolicTangentActivation_init
 
 }
 
-static void PyBobMachineMultipliedHyperbolicTangentActivation_delete
-(PyBobMachineMultipliedHyperbolicTangentActivationObject* self) {
+static void PyBobLearnMultipliedHyperbolicTangentActivation_delete
+(PyBobLearnMultipliedHyperbolicTangentActivationObject* self) {
 
   delete self->base;
   self->parent.base = 0;
@@ -71,8 +71,8 @@ PyDoc_STRVAR(s_C_doc,
 tangent function (read-only).\n\
 ");
 
-static PyObject* PyBobMachineMultipliedHyperbolicTangentActivation_C
-(PyBobMachineMultipliedHyperbolicTangentActivationObject* self) {
+static PyObject* PyBobLearnMultipliedHyperbolicTangentActivation_C
+(PyBobLearnMultipliedHyperbolicTangentActivationObject* self) {
 
   return Py_BuildValue("d", self->base->C());
 
@@ -85,24 +85,24 @@ tangent function (read-only).\n\
 "
 );
 
-static PyObject* PyBobMachineMultipliedHyperbolicTangentActivation_M
-(PyBobMachineMultipliedHyperbolicTangentActivationObject* self) {
+static PyObject* PyBobLearnMultipliedHyperbolicTangentActivation_M
+(PyBobLearnMultipliedHyperbolicTangentActivationObject* self) {
 
   return Py_BuildValue("d", self->base->M());
 
 }
 
-static PyGetSetDef PyBobMachineMultipliedHyperbolicTangentActivation_getseters[] = {
+static PyGetSetDef PyBobLearnMultipliedHyperbolicTangentActivation_getseters[] = {
     {
       s_C_str,
-      (getter)PyBobMachineMultipliedHyperbolicTangentActivation_C,
+      (getter)PyBobLearnMultipliedHyperbolicTangentActivation_C,
       0,
       s_C_doc,
       0
     },
     {
       s_M_str,
-      (getter)PyBobMachineMultipliedHyperbolicTangentActivation_M,
+      (getter)PyBobLearnMultipliedHyperbolicTangentActivation_M,
       0,
       s_M_doc,
       0
@@ -110,13 +110,13 @@ static PyGetSetDef PyBobMachineMultipliedHyperbolicTangentActivation_getseters[]
     {0}  /* Sentinel */
 };
 
-PyTypeObject PyBobMachineMultipliedHyperbolicTangentActivation_Type = {
+PyTypeObject PyBobLearnMultipliedHyperbolicTangentActivation_Type = {
     PyObject_HEAD_INIT(0)
     0,                                                  /*ob_size*/
     s_multtanhactivation_str,                           /*tp_name*/
-    sizeof(PyBobMachineMultipliedHyperbolicTangentActivationObject),       /*tp_basicsize*/
+    sizeof(PyBobLearnMultipliedHyperbolicTangentActivationObject),       /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
-    (destructor)PyBobMachineMultipliedHyperbolicTangentActivation_delete,  /*tp_dealloc*/
+    (destructor)PyBobLearnMultipliedHyperbolicTangentActivation_delete,  /*tp_dealloc*/
     0,                                                  /*tp_print*/
     0,                                                  /*tp_getattr*/
     0,                                                  /*tp_setattr*/
@@ -141,13 +141,13 @@ PyTypeObject PyBobMachineMultipliedHyperbolicTangentActivation_Type = {
     0,		                                              /* tp_iternext */
     0,                                                  /* tp_methods */
     0,                                                  /* tp_members */
-    PyBobMachineMultipliedHyperbolicTangentActivation_getseters,           /* tp_getset */
+    PyBobLearnMultipliedHyperbolicTangentActivation_getseters,           /* tp_getset */
     0,                                                  /* tp_base */
     0,                                                  /* tp_dict */
     0,                                                  /* tp_descr_get */
     0,                                                  /* tp_descr_set */
     0,                                                  /* tp_dictoffset */
-    (initproc)PyBobMachineMultipliedHyperbolicTangentActivation_init,      /* tp_init */
+    (initproc)PyBobLearnMultipliedHyperbolicTangentActivation_init,      /* tp_init */
     0,                                                  /* tp_alloc */
     0,                                                  /* tp_new */
 };
