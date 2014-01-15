@@ -230,7 +230,7 @@ typedef struct {
    * Returns -1 on error, 0 on success. PyCapsule_Import will set an exception
    * if there's an error.
    */
-  static int import_xbob_io(void) {
+  static int import_xbob_learn_activation(void) {
 
     PyObject *c_api_object;
     PyObject *module;
