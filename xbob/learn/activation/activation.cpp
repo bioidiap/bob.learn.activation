@@ -606,5 +606,5 @@ PyTypeObject PyBobLearnActivation_Type = {
     0,                                              /* tp_dictoffset */
     (initproc)PyBobLearnActivation_init,            /* tp_init */
     0,                                              /* tp_alloc */
-    PyBobLearnActivation_new                        /* tp_new */
+    PyBobLearnActivation_new,                       /* tp_new */
 };
