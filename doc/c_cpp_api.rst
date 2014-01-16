@@ -74,6 +74,14 @@ Activation Functors
    Returns ``1`` if it is, and ``0`` otherwise.
 
 
+.. cpp:function:: PyObject* PyBobLearnActivation_NewFromActivation(boost::shared_ptr<bob::machine::Activation> a)
+
+   Constructs a new :c:type:`PyBobLearnActivationObject` starting from a shared
+   pointer to a pre-allocated `bob::machine::Activation` instance. This API is
+   available so that return values from actuall C++ machines can be mapped into
+   Python. It is the sole way to build an object of type :py:class:`Activation`
+   without recurring to the derived classes.
+
 .. note::
 
    Other object definitions exist for each of the specializations for

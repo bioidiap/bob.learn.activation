@@ -33,7 +33,7 @@ static int PyBobLearnLinearActivation_init
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "|d", kwlist, &C)) return -1;
 
   try {
-    self->base = new bob::machine::LinearActivation(C);
+    self->cxx.reset(new bob::machine::LinearActivation(C));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -42,7 +42,7 @@ static int PyBobLearnLinearActivation_init
     PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", s_linearactivation_str);
   }
 
-  self->parent.base = self->base;
+  self->parent.cxx = self->cxx;
 
   if (PyErr_Occurred()) return -1;
 
@@ -53,9 +53,8 @@ static int PyBobLearnLinearActivation_init
 static void PyBobLearnLinearActivation_delete
 (PyBobLearnLinearActivationObject* self) {
 
-  delete self->base;
-  self->parent.base = 0;
-  self->base = 0;
+  self->parent.cxx.reset();
+  self->cxx.reset();
   self->parent.ob_type->tp_free((PyObject*)self);
 
 }
@@ -68,7 +67,7 @@ PyDoc_STRVAR(s_C_doc,
 static PyObject* PyBobLearnLinearActivation_C
 (PyBobLearnLinearActivationObject* self) {
 
-  return Py_BuildValue("d", self->base->C());
+  return Py_BuildValue("d", self->cxx->C());
 
 }
 

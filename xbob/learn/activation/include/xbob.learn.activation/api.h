@@ -33,7 +33,7 @@
 
 typedef struct {
   PyObject_HEAD
-  bob::machine::Activation* base;
+  boost::shared_ptr<bob::machine::Activation> cxx;
 } PyBobLearnActivationObject;
 
 #define PyBobLearnActivation_Type_NUM 1
@@ -43,16 +43,20 @@ typedef struct {
 #define PyBobLearnActivation_Check_RET int
 #define PyBobLearnActivation_Check_PROTO (PyObject* o)
 
+#define PyBobLearnActivation_NewFromActivation_NUM 3
+#define PyBobLearnActivation_NewFromActivation_RET PyObject*
+#define PyBobLearnActivation_NewFromActivation_PROTO (boost::shared_ptr<bob::machine::Activation> a)
+
 /***********************************************
  * Bindings for xbob.learn.activation.Identity *
  ***********************************************/
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  bob::machine::IdentityActivation* base;
+  boost::shared_ptr<bob::machine::IdentityActivation> cxx;
 } PyBobLearnIdentityActivationObject;
 
-#define PyBobLearnIdentityActivation_Type_NUM 3
+#define PyBobLearnIdentityActivation_Type_NUM 4
 #define PyBobLearnIdentityActivation_Type_TYPE PyTypeObject
 
 /*********************************************
@@ -61,10 +65,10 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  bob::machine::LinearActivation* base;
+  boost::shared_ptr<bob::machine::LinearActivation> cxx;
 } PyBobLearnLinearActivationObject;
 
-#define PyBobLearnLinearActivation_Type_NUM 4
+#define PyBobLearnLinearActivation_Type_NUM 5
 #define PyBobLearnLinearActivation_Type_TYPE PyTypeObject
 
 /***********************************************
@@ -73,10 +77,10 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  bob::machine::LogisticActivation* base;
+  boost::shared_ptr<bob::machine::LogisticActivation> cxx;
 } PyBobLearnLogisticActivationObject;
 
-#define PyBobLearnLogisticActivation_Type_NUM 5
+#define PyBobLearnLogisticActivation_Type_NUM 6
 #define PyBobLearnLogisticActivation_Type_TYPE PyTypeObject
 
 /********************************************************
@@ -85,10 +89,10 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  bob::machine::HyperbolicTangentActivation* base;
+  boost::shared_ptr<bob::machine::HyperbolicTangentActivation> cxx;
 } PyBobLearnHyperbolicTangentActivationObject;
 
-#define PyBobLearnHyperbolicTangentActivation_Type_NUM 6
+#define PyBobLearnHyperbolicTangentActivation_Type_NUM 7
 #define PyBobLearnHyperbolicTangentActivation_Type_TYPE PyTypeObject
 
 /******************************************************************
@@ -97,14 +101,14 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  bob::machine::MultipliedHyperbolicTangentActivation* base;
+  boost::shared_ptr<bob::machine::MultipliedHyperbolicTangentActivation> cxx;
 } PyBobLearnMultipliedHyperbolicTangentActivationObject;
 
-#define PyBobLearnMultipliedHyperbolicTangentActivation_Type_NUM 7
+#define PyBobLearnMultipliedHyperbolicTangentActivation_Type_NUM 8
 #define PyBobLearnMultipliedHyperbolicTangentActivation_Type_TYPE PyTypeObject
 
 /* Total number of C API pointers */
-#define PyXbobLearnActivation_API_pointers 8
+#define PyXbobLearnActivation_API_pointers 9
 
 #ifdef XBOB_LEARN_ACTIVATION_MODULE
 
@@ -123,6 +127,8 @@ typedef struct {
   extern PyBobLearnActivation_Type_TYPE PyBobLearnActivation_Type;
 
   PyBobLearnActivation_Check_RET PyBobLearnActivation_Check PyBobLearnActivation_Check_PROTO;
+
+  PyBobLearnActivation_NewFromActivation_RET PyBobLearnActivation_NewFromActivation PyBobLearnActivation_NewFromActivation_PROTO;
 
   /***********************************************
    * Bindings for xbob.learn.activation.Identity *
@@ -193,6 +199,8 @@ typedef struct {
 # define PyBobLearnActivation_Type (*(PyBobLearnActivation_Type_TYPE *)PyXbobLearnActivation_API[PyBobLearnActivation_Type_NUM])
 
 # define PyBobLearnActivation_Check (*(PyBobLearnActivation_Check_RET (*)PyBobLearnActivation_Check_PROTO) PyXbobLearnActivation_API[PyBobLearnActivation_Check_NUM])
+
+# define PyBobLearnActivation_NewFromActivation (*(PyBobLearnActivation_NewFromActivation_RET (*)PyBobLearnActivation_NewFromActivation_PROTO) PyXbobLearnActivation_API[PyBobLearnActivation_NewFromActivation_NUM])
 
   /***********************************************
    * Bindings for xbob.learn.activation.Identity *

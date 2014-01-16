@@ -29,7 +29,7 @@ static int PyBobLearnHyperbolicTangentActivation_init
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "", kwlist)) return -1;
 
   try {
-    self->base = new bob::machine::HyperbolicTangentActivation();
+    self->cxx.reset(new bob::machine::HyperbolicTangentActivation());
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -38,7 +38,7 @@ static int PyBobLearnHyperbolicTangentActivation_init
     PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", s_hyperbolictangentactivation_str);
   }
 
-  self->parent.base = self->base;
+  self->parent.cxx = self->cxx;
 
   if (PyErr_Occurred()) return -1;
 
@@ -49,9 +49,8 @@ static int PyBobLearnHyperbolicTangentActivation_init
 static void PyBobLearnHyperbolicTangentActivation_delete
 (PyBobLearnHyperbolicTangentActivationObject* self) {
 
-  delete self->base;
-  self->parent.base = 0;
-  self->base = 0;
+  self->parent.cxx.reset();
+  self->cxx.reset();
   self->parent.ob_type->tp_free((PyObject*)self);
 
 }

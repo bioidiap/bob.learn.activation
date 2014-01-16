@@ -89,6 +89,8 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   PyXbobLearnActivation_API[PyBobLearnActivation_Check_NUM] = (void *)&PyBobLearnActivation_Check;
 
+  PyXbobLearnActivation_API[PyBobLearnActivation_NewFromActivation_NUM] = (void *)&PyBobLearnActivation_NewFromActivation;
+
   /***********************************************
    * Bindings for xbob.learn.activation.Identity *
    ***********************************************/

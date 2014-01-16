@@ -38,7 +38,7 @@ static int PyBobLearnMultipliedHyperbolicTangentActivation_init
     return -1;
 
   try {
-    self->base = new bob::machine::MultipliedHyperbolicTangentActivation(C, M);
+    self->cxx.reset(new bob::machine::MultipliedHyperbolicTangentActivation(C, M));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
@@ -47,7 +47,7 @@ static int PyBobLearnMultipliedHyperbolicTangentActivation_init
     PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", s_multtanhactivation_str);
   }
 
-  self->parent.base = self->base;
+  self->parent.cxx = self->cxx;
 
   if (PyErr_Occurred()) return -1;
 
@@ -58,9 +58,8 @@ static int PyBobLearnMultipliedHyperbolicTangentActivation_init
 static void PyBobLearnMultipliedHyperbolicTangentActivation_delete
 (PyBobLearnMultipliedHyperbolicTangentActivationObject* self) {
 
-  delete self->base;
-  self->parent.base = 0;
-  self->base = 0;
+  self->parent.cxx.reset();
+  self->cxx.reset();
   self->parent.ob_type->tp_free((PyObject*)self);
 
 }
@@ -74,7 +73,7 @@ tangent function (read-only).\n\
 static PyObject* PyBobLearnMultipliedHyperbolicTangentActivation_C
 (PyBobLearnMultipliedHyperbolicTangentActivationObject* self) {
 
-  return Py_BuildValue("d", self->base->C());
+  return Py_BuildValue("d", self->cxx->C());
 
 }
 
@@ -88,7 +87,7 @@ tangent function (read-only).\n\
 static PyObject* PyBobLearnMultipliedHyperbolicTangentActivation_M
 (PyBobLearnMultipliedHyperbolicTangentActivationObject* self) {
 
-  return Py_BuildValue("d", self->base->M());
+  return Py_BuildValue("d", self->cxx->M());
 
 }
 

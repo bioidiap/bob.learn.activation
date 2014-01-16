@@ -43,10 +43,41 @@ PyDoc_STRVAR(s_activation_doc,
 \n\
 ");
 
+static PyObject* PyBobLearnActivation_new
+(PyTypeObject* type, PyObject*, PyObject*) {
+
+  /* Allocates the python object itself */
+  PyBobLearnActivationObject* self =
+    (PyBobLearnActivationObject*)type->tp_alloc(type, 0);
+
+  self->cxx.reset();
+
+  return reinterpret_cast<PyObject*>(self);
+
+}
+
+PyObject* PyBobLearnActivation_NewFromActivation
+(boost::shared_ptr<bob::machine::Activation> a) {
+
+  PyBobLearnActivationObject* retval = (PyBobLearnActivationObject*)PyBobLearnActivation_new(&PyBobLearnActivation_Type, 0, 0);
+
+  retval->cxx = a;
+
+  return reinterpret_cast<PyObject*>(retval);
+
+}
+
+static void PyBobLearnActivation_delete (PyBobLearnActivationObject* self) {
+
+  self->cxx.reset();
+  self->ob_type->tp_free((PyObject*)self);
+
+}
+
 static int PyBobLearnActivation_init(PyBobLearnActivationObject* self,
     PyObject*, PyObject*) {
 
-  PyErr_Format(PyExc_NotImplementedError, "cannot initialize object of base type `%s' - use one of the inherited classes", s_activation_str);
+  PyErr_Format(PyExc_NotImplementedError, "cannot initialize object of base type `%s' - use one of the inherited classes", self->ob_type->tp_name);
   return -1;
 
 }
@@ -99,7 +130,7 @@ static int apply(boost::function<double (double)> function,
 
 }
 
-static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* o,
+static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* self,
     double (bob::machine::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
 
@@ -120,12 +151,12 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* o,
     auto z_converted_ = make_safe(z_converted);
 
     if (z_converted->type_num != NPY_FLOAT64) {
-      PyErr_SetString(PyExc_TypeError, "Activation function only supports 64-bit float arrays for input array `z'");
+      PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for input array `z'", self->ob_type->tp_name);
       return 0;
     }
 
     if (z_converted->ndim < 1 || z_converted->ndim > 4) {
-      PyErr_Format(PyExc_TypeError, "Activation function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", z_converted->ndim);
+      PyErr_Format(PyExc_TypeError, "`%s' function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", self->ob_type->tp_name, z_converted->ndim);
       return 0;
     }
 
@@ -135,11 +166,11 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* o,
     auto res_ = make_safe(res);
 
     // processes the data
-    int ok = apply(boost::bind(method, o->base, _1),
+    int ok = apply(boost::bind(method, self->cxx, _1),
         z_converted, reinterpret_cast<PyBlitzArrayObject*>(res));
 
     if (!ok) {
-      PyErr_SetString(PyExc_RuntimeError, "unexpected error occurred applying C++ activation function to input array (DEBUG ME)");
+      PyErr_Format(PyExc_RuntimeError, "unexpected error occurred applying `%s' to input array (DEBUG ME)", self->ob_type->tp_name);
       return 0;
     }
 
@@ -152,18 +183,18 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* o,
 
     PyObject* z_float = PyNumber_Float(z);
     auto z_float_ = make_safe(z_float);
-    auto bound_method = boost::bind(method, o->base, _1);
+    auto bound_method = boost::bind(method, self->cxx, _1);
     double res_c = bound_method(PyFloat_AsDouble(z_float));
     return PyFloat_FromDouble(res_c);
 
   }
 
-  PyErr_Format(PyExc_TypeError, "Activation function is not capable to process input objects of type `%s'", z->ob_type->tp_name);
+  PyErr_Format(PyExc_TypeError, "`%s' is not capable to process input objects of type `%s'", self->ob_type->tp_name, z->ob_type->tp_name);
   return 0;
 
 }
 
-static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* o,
+static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* self,
     double (bob::machine::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
 
@@ -184,17 +215,17 @@ static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* o,
   auto res_ = make_safe(res);
 
   if (z->type_num != NPY_FLOAT64) {
-    PyErr_SetString(PyExc_TypeError, "Activation function only supports 64-bit float arrays for input array `z'");
+    PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for input array `z'", self->ob_type->tp_name);
     return 0;
   }
 
   if (res->type_num != NPY_FLOAT64) {
-    PyErr_SetString(PyExc_TypeError, "Activation function only supports 64-bit float arrays for output array `res'");
+    PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for output array `res'", self->ob_type->tp_name);
     return 0;
   }
 
   if (z->ndim < 1 || z->ndim > 4) {
-    PyErr_Format(PyExc_TypeError, "Activation function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", z->ndim);
+    PyErr_Format(PyExc_TypeError, "`%s' function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", self->ob_type->tp_name, z->ndim);
     return 0;
   }
 
@@ -213,10 +244,10 @@ static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* o,
   }
 
   //at this point all checks are done, we can proceed into calling C++
-  int ok = apply(boost::bind(method, o->base, _1), z, res);
+  int ok = apply(boost::bind(method, self->cxx, _1), z, res);
 
   if (!ok) {
-    PyErr_SetString(PyExc_RuntimeError, "unexpected error occurred applying C++ activation function to input array (DEBUG ME)");
+    PyErr_Format(PyExc_RuntimeError, "unexpected error occurred applying C++ `%s' to input array (DEBUG ME)", self->ob_type->tp_name);
     return 0;
   }
 
@@ -249,7 +280,7 @@ error otherwise.\n\
 \n\
 ");
 
-static PyObject* PyBobLearnActivation_call(PyBobLearnActivationObject* o,
+static PyObject* PyBobLearnActivation_call(PyBobLearnActivationObject* self,
   PyObject* args, PyObject* kwds) {
 
   Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
@@ -258,12 +289,12 @@ static PyObject* PyBobLearnActivation_call(PyBobLearnActivationObject* o,
 
     case 1:
       return PyBobLearnActivation_call1
-        (o, &bob::machine::Activation::f, args, kwds);
+        (self, &bob::machine::Activation::f, args, kwds);
       break;
 
     case 2:
       return PyBobLearnActivation_call2
-        (o, &bob::machine::Activation::f, args, kwds);
+        (self, &bob::machine::Activation::f, args, kwds);
       break;
 
     default:
@@ -301,7 +332,7 @@ error otherwise.\n\
 \n\
 ");
 
-static PyObject* PyBobLearnActivation_f_prime(PyBobLearnActivationObject* o,
+static PyObject* PyBobLearnActivation_f_prime(PyBobLearnActivationObject* self,
   PyObject* args, PyObject* kwds) {
 
   Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
@@ -310,12 +341,12 @@ static PyObject* PyBobLearnActivation_f_prime(PyBobLearnActivationObject* o,
 
     case 1:
       return PyBobLearnActivation_call1
-        (o, &bob::machine::Activation::f_prime, args, kwds);
+        (self, &bob::machine::Activation::f_prime, args, kwds);
       break;
 
     case 2:
       return PyBobLearnActivation_call2
-        (o, &bob::machine::Activation::f_prime, args, kwds);
+        (self, &bob::machine::Activation::f_prime, args, kwds);
       break;
 
     default:
@@ -353,8 +384,8 @@ error otherwise.\n\
 \n\
 ");
 
-static PyObject* PyBobLearnActivation_f_prime_from_f(PyBobLearnActivationObject* o,
-  PyObject* args, PyObject* kwds) {
+static PyObject* PyBobLearnActivation_f_prime_from_f
+(PyBobLearnActivationObject* self, PyObject* args, PyObject* kwds) {
 
   Py_ssize_t nargs = args?PyTuple_Size(args):0 + kwds?PyDict_Size(kwds):0;
 
@@ -362,12 +393,12 @@ static PyObject* PyBobLearnActivation_f_prime_from_f(PyBobLearnActivationObject*
 
     case 1:
       return PyBobLearnActivation_call1
-        (o, &bob::machine::Activation::f_prime_from_f, args, kwds);
+        (self, &bob::machine::Activation::f_prime_from_f, args, kwds);
       break;
 
     case 2:
       return PyBobLearnActivation_call2
-        (o, &bob::machine::Activation::f_prime_from_f, args, kwds);
+        (self, &bob::machine::Activation::f_prime_from_f, args, kwds);
       break;
 
     default:
@@ -389,8 +420,9 @@ in connection with the Activation registry.\n\
 \n\
 ");
 
-static PyObject* PyBobLearnActivation_UniqueIdentifier (PyBobLearnActivationObject* o) {
-  return Py_BuildValue("s", o->base->unique_identifier().c_str());
+static PyObject* PyBobLearnActivation_UniqueIdentifier
+(PyBobLearnActivationObject* self) {
+  return Py_BuildValue("s", self->cxx->unique_identifier().c_str());
 }
 
 PyDoc_STRVAR(s_load_str, "load");
@@ -401,18 +433,18 @@ Loads itself from a :py:class:`xbob.io.HDF5File`\n\
 \n\
 ");
 
-static PyObject* PyBobLearnActivation_Load(PyBobLearnActivationObject* o,
+static PyObject* PyBobLearnActivation_Load(PyBobLearnActivationObject* self,
     PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "Activation function cannot load itself from `%s', only from an HDF5 file", f->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' cannot load itself from `%s', only from an HDF5 file", self->ob_type->tp_name, f->ob_type->tp_name);
     return 0;
   }
 
   auto h5f = reinterpret_cast<PyBobIoHDF5FileObject*>(f);
 
   try {
-    o->base->load(*h5f->f);
+    self->cxx->load(*h5f->f);
   }
   catch (std::exception& e) {
     PyErr_SetString(PyExc_RuntimeError, e.what());
@@ -431,22 +463,22 @@ PyDoc_STRVAR(s_save_str, "save");
 PyDoc_STRVAR(s_save_doc,
 "o.save(f) -> None\n\
 \n\
-Loads itself from a :py:class:`xbob.io.HDF5File`\n\
+Saves itself to a :py:class:`xbob.io.HDF5File`\n\
 \n\
 ");
 
-static PyObject* PyBobLearnActivation_Save(PyBobLearnActivationObject* o,
-    PyObject* f) {
+static PyObject* PyBobLearnActivation_Save
+(PyBobLearnActivationObject* self, PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "Activation function cannot write itself to `%s', only to an HDF5 file", f->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' cannot write itself to `%s', only to an HDF5 file", self->ob_type->tp_name, f->ob_type->tp_name);
     return 0;
   }
 
   auto h5f = reinterpret_cast<PyBobIoHDF5FileObject*>(f);
 
   try {
-    o->base->save(*h5f->f);
+    self->cxx->save(*h5f->f);
   }
   catch (std::exception& e) {
     PyErr_SetString(PyExc_RuntimeError, e.what());
@@ -509,7 +541,7 @@ static PyObject* PyBobLearnActivation_RichCompare (PyBobLearnActivationObject* s
 
   if (!PyBobLearnActivation_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
-        s_activation_str, other->ob_type->tp_name);
+        self->ob_type->tp_name, other->ob_type->tp_name);
     return 0;
   }
 
@@ -517,11 +549,11 @@ static PyObject* PyBobLearnActivation_RichCompare (PyBobLearnActivationObject* s
 
   switch (op) {
     case Py_EQ:
-      if (self->base->str() == other_->base->str()) Py_RETURN_TRUE;
+      if (self->cxx->str() == other_->cxx->str()) Py_RETURN_TRUE;
       Py_RETURN_FALSE;
       break;
     case Py_NE:
-      if (self->base->str() != other_->base->str()) Py_RETURN_TRUE;
+      if (self->cxx->str() != other_->cxx->str()) Py_RETURN_TRUE;
       Py_RETURN_FALSE;
       break;
     default:
@@ -531,8 +563,8 @@ static PyObject* PyBobLearnActivation_RichCompare (PyBobLearnActivationObject* s
 
 }
 
-static PyObject* PyBobLearnActivation_Str (PyBobLearnActivationObject* o) {
-  return Py_BuildValue("s", o->base->str().c_str());
+static PyObject* PyBobLearnActivation_Str (PyBobLearnActivationObject* self) {
+  return Py_BuildValue("s", self->cxx->str().c_str());
 }
 
 PyTypeObject PyBobLearnActivation_Type = {
@@ -541,7 +573,7 @@ PyTypeObject PyBobLearnActivation_Type = {
     s_activation_str,                               /* tp_name */
     sizeof(PyBobLearnActivationObject),             /* tp_basicsize */
     0,                                              /* tp_itemsize */
-    0,                                              /* tp_dealloc */
+    (destructor)PyBobLearnActivation_delete,        /* tp_dealloc */
     0,                                              /* tp_print */
     0,                                              /* tp_getattr */
     0,                                              /* tp_setattr */
@@ -574,5 +606,5 @@ PyTypeObject PyBobLearnActivation_Type = {
     0,                                              /* tp_dictoffset */
     (initproc)PyBobLearnActivation_init,            /* tp_init */
     0,                                              /* tp_alloc */
-    0,                                              /* tp_new */
+    PyBobLearnActivation_new                        /* tp_new */
 };
