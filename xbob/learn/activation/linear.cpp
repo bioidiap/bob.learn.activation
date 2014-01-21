@@ -55,7 +55,7 @@ static void PyBobLearnLinearActivation_delete
 
   self->parent.cxx.reset();
   self->cxx.reset();
-  self->parent.ob_type->tp_free((PyObject*)self);
+  Py_TYPE(&self->parent)->tp_free((PyObject*)self);
 
 }
 
@@ -83,8 +83,7 @@ static PyGetSetDef PyBobLearnLinearActivation_getseters[] = {
 };
 
 PyTypeObject PyBobLearnLinearActivation_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                                  /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     s_linearactivation_str,                             /*tp_name*/
     sizeof(PyBobLearnLinearActivationObject),           /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/

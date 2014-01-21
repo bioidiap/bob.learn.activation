@@ -60,7 +60,7 @@ static void PyBobLearnMultipliedHyperbolicTangentActivation_delete
 
   self->parent.cxx.reset();
   self->cxx.reset();
-  self->parent.ob_type->tp_free((PyObject*)self);
+  Py_TYPE(&self->parent)->tp_free((PyObject*)self);
 
 }
 
@@ -110,8 +110,7 @@ static PyGetSetDef PyBobLearnMultipliedHyperbolicTangentActivation_getseters[] =
 };
 
 PyTypeObject PyBobLearnMultipliedHyperbolicTangentActivation_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                                  /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     s_multtanhactivation_str,                           /*tp_name*/
     sizeof(PyBobLearnMultipliedHyperbolicTangentActivationObject),       /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/

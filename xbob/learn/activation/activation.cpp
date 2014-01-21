@@ -70,14 +70,14 @@ PyObject* PyBobLearnActivation_NewFromActivation
 static void PyBobLearnActivation_delete (PyBobLearnActivationObject* self) {
 
   self->cxx.reset();
-  self->ob_type->tp_free((PyObject*)self);
+  Py_TYPE(self)->tp_free((PyObject*)self);
 
 }
 
 static int PyBobLearnActivation_init(PyBobLearnActivationObject* self,
     PyObject*, PyObject*) {
 
-  PyErr_Format(PyExc_NotImplementedError, "cannot initialize object of base type `%s' - use one of the inherited classes", self->ob_type->tp_name);
+  PyErr_Format(PyExc_NotImplementedError, "cannot initialize object of base type `%s' - use one of the inherited classes", Py_TYPE(self)->tp_name);
   return -1;
 
 }
@@ -151,12 +151,12 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* self,
     auto z_converted_ = make_safe(z_converted);
 
     if (z_converted->type_num != NPY_FLOAT64) {
-      PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for input array `z'", self->ob_type->tp_name);
+      PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for input array `z'", Py_TYPE(self)->tp_name);
       return 0;
     }
 
     if (z_converted->ndim < 1 || z_converted->ndim > 4) {
-      PyErr_Format(PyExc_TypeError, "`%s' function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", self->ob_type->tp_name, z_converted->ndim);
+      PyErr_Format(PyExc_TypeError, "`%s' function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", Py_TYPE(self)->tp_name, z_converted->ndim);
       return 0;
     }
 
@@ -170,7 +170,7 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* self,
         z_converted, reinterpret_cast<PyBlitzArrayObject*>(res));
 
     if (!ok) {
-      PyErr_Format(PyExc_RuntimeError, "unexpected error occurred applying `%s' to input array (DEBUG ME)", self->ob_type->tp_name);
+      PyErr_Format(PyExc_RuntimeError, "unexpected error occurred applying `%s' to input array (DEBUG ME)", Py_TYPE(self)->tp_name);
       return 0;
     }
 
@@ -189,7 +189,7 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* self,
 
   }
 
-  PyErr_Format(PyExc_TypeError, "`%s' is not capable to process input objects of type `%s'", self->ob_type->tp_name, z->ob_type->tp_name);
+  PyErr_Format(PyExc_TypeError, "`%s' is not capable to process input objects of type `%s'", Py_TYPE(self)->tp_name, Py_TYPE(z)->tp_name);
   return 0;
 
 }
@@ -215,17 +215,17 @@ static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* self,
   auto res_ = make_safe(res);
 
   if (z->type_num != NPY_FLOAT64) {
-    PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for input array `z'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for input array `z'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
   if (res->type_num != NPY_FLOAT64) {
-    PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for output array `res'", self->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' function only supports 64-bit float arrays for output array `res'", Py_TYPE(self)->tp_name);
     return 0;
   }
 
   if (z->ndim < 1 || z->ndim > 4) {
-    PyErr_Format(PyExc_TypeError, "`%s' function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", self->ob_type->tp_name, z->ndim);
+    PyErr_Format(PyExc_TypeError, "`%s' function only accepts 1, 2, 3 or 4-dimensional arrays (not %" PY_FORMAT_SIZE_T "dD arrays)", Py_TYPE(self)->tp_name, z->ndim);
     return 0;
   }
 
@@ -247,7 +247,7 @@ static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* self,
   int ok = apply(boost::bind(method, self->cxx, _1), z, res);
 
   if (!ok) {
-    PyErr_Format(PyExc_RuntimeError, "unexpected error occurred applying C++ `%s' to input array (DEBUG ME)", self->ob_type->tp_name);
+    PyErr_Format(PyExc_RuntimeError, "unexpected error occurred applying C++ `%s' to input array (DEBUG ME)", Py_TYPE(self)->tp_name);
     return 0;
   }
 
@@ -437,7 +437,7 @@ static PyObject* PyBobLearnActivation_Load(PyBobLearnActivationObject* self,
     PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "`%s' cannot load itself from `%s', only from an HDF5 file", self->ob_type->tp_name, f->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' cannot load itself from `%s', only from an HDF5 file", Py_TYPE(self)->tp_name, Py_TYPE(f)->tp_name);
     return 0;
   }
 
@@ -471,7 +471,7 @@ static PyObject* PyBobLearnActivation_Save
 (PyBobLearnActivationObject* self, PyObject* f) {
 
   if (!PyBobIoHDF5File_Check(f)) {
-    PyErr_Format(PyExc_TypeError, "`%s' cannot write itself to `%s', only to an HDF5 file", self->ob_type->tp_name, f->ob_type->tp_name);
+    PyErr_Format(PyExc_TypeError, "`%s' cannot write itself to `%s', only to an HDF5 file", Py_TYPE(self)->tp_name, Py_TYPE(f)->tp_name);
     return 0;
   }
 
@@ -541,7 +541,7 @@ static PyObject* PyBobLearnActivation_RichCompare (PyBobLearnActivationObject* s
 
   if (!PyBobLearnActivation_Check(other)) {
     PyErr_Format(PyExc_TypeError, "cannot compare `%s' with `%s'",
-        self->ob_type->tp_name, other->ob_type->tp_name);
+        Py_TYPE(self)->tp_name, Py_TYPE(other)->tp_name);
     return 0;
   }
 
@@ -568,8 +568,7 @@ static PyObject* PyBobLearnActivation_Str (PyBobLearnActivationObject* self) {
 }
 
 PyTypeObject PyBobLearnActivation_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                              /* ob_size */
+    PyVarObject_HEAD_INIT(0, 0)
     s_activation_str,                               /* tp_name */
     sizeof(PyBobLearnActivationObject),             /* tp_basicsize */
     0,                                              /* tp_itemsize */

@@ -51,13 +51,12 @@ static void PyBobLearnHyperbolicTangentActivation_delete
 
   self->parent.cxx.reset();
   self->cxx.reset();
-  self->parent.ob_type->tp_free((PyObject*)self);
+  Py_TYPE(&self->parent)->tp_free((PyObject*)self);
 
 }
 
 PyTypeObject PyBobLearnHyperbolicTangentActivation_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                                   /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     s_hyperbolictangentactivation_str,                   /*tp_name*/
     sizeof(PyBobLearnHyperbolicTangentActivationObject), /*tp_basicsize*/
     0,                                                   /*tp_itemsize*/

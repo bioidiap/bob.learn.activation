@@ -50,13 +50,12 @@ static void PyBobLearnIdentityActivation_delete
 
   self->parent.cxx.reset();
   self->cxx.reset();
-  self->parent.ob_type->tp_free((PyObject*)self);
+  Py_TYPE(&self->parent)->tp_free((PyObject*)self);
 
 }
 
 PyTypeObject PyBobLearnIdentityActivation_Type = {
-    PyObject_HEAD_INIT(0)
-    0,                                                  /*ob_size*/
+    PyVarObject_HEAD_INIT(0, 0)
     s_identityactivation_str,                           /*tp_name*/
     sizeof(PyBobLearnIdentityActivationObject),         /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
