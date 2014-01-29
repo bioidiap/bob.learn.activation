@@ -8,10 +8,10 @@
  */
 
 #define XBOB_LEARN_ACTIVATION_MODULE
-#include "cleanup.h"
 #include <xbob.learn.activation/api.h>
 #include <xbob.io/api.h>
 #include <xbob.blitz/cppapi.h>
+#include <xbob.blitz/cleanup.h>
 #include <bob/machine/Activation.h>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>

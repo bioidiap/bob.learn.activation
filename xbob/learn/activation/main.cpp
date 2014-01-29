@@ -11,8 +11,8 @@
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
-#include <xbob.blitz/capi.h>
 #include <xbob.io/api.h>
+#include <xbob.blitz/cleanup.h>
 
 static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
@@ -33,86 +33,59 @@ static PyModuleDef module_definition = {
 
 int PyXbobLearnActivation_APIVersion = XBOB_LEARN_ACTIVATION_API_VERSION;
 
-PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
+static PyObject* create_module (void) {
 
   PyBobLearnActivation_Type.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyBobLearnActivation_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnActivation_Type) < 0) return 0;
 
   PyBobLearnIdentityActivation_Type.tp_base = &PyBobLearnActivation_Type;
-  if (PyType_Ready(&PyBobLearnIdentityActivation_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnIdentityActivation_Type) < 0) return 0;
 
   PyBobLearnLinearActivation_Type.tp_base = &PyBobLearnActivation_Type;
-  if (PyType_Ready(&PyBobLearnLinearActivation_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnLinearActivation_Type) < 0) return 0;
 
   PyBobLearnLogisticActivation_Type.tp_base = &PyBobLearnActivation_Type;
-  if (PyType_Ready(&PyBobLearnLogisticActivation_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnLogisticActivation_Type) < 0) return 0;
 
   PyBobLearnHyperbolicTangentActivation_Type.tp_base =
     &PyBobLearnActivation_Type;
-  if (PyType_Ready(&PyBobLearnHyperbolicTangentActivation_Type) < 0) return
-# if PY_VERSION_HEX >= 0x03000000
-    0
-# endif
-    ;
+  if (PyType_Ready(&PyBobLearnHyperbolicTangentActivation_Type) < 0) return 0;
 
   PyBobLearnMultipliedHyperbolicTangentActivation_Type.tp_base =
     &PyBobLearnActivation_Type;
   if (PyType_Ready(&PyBobLearnMultipliedHyperbolicTangentActivation_Type) < 0)
-    return
-# if PY_VERSION_HEX >= 0x03000000
-      0
-# endif
-      ;
-
+    return 0;
 
 # if PY_VERSION_HEX >= 0x03000000
   PyObject* m = PyModule_Create(&module_definition);
-  if (!m) return 0;
 # else
-  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, 
-      module_methods, module_docstr);
-  if (!m) return;
+  PyObject* m = Py_InitModule3(XBOB_EXT_MODULE_NAME, module_methods, module_docstr);
 # endif
+  if (!m) return 0;
+  auto m_ = make_safe(m);
 
   /* register some constants */
-  PyModule_AddIntConstant(m, "__api_version__",
-      XBOB_LEARN_ACTIVATION_API_VERSION);
-  PyModule_AddStringConstant(m, "__version__", XBOB_EXT_MODULE_VERSION);
+  if (PyModule_AddIntConstant(m, "__api_version__", XBOB_IO_API_VERSION) < 0) return 0;
+  if (PyModule_AddStringConstant(m, "__version__", XBOB_EXT_MODULE_VERSION) < 0) return 0;
 
   /* register the types to python */
   Py_INCREF(&PyBobLearnActivation_Type);
-  PyModule_AddObject(m, "Activation", (PyObject *)&PyBobLearnActivation_Type);
+  if (PyModule_AddObject(m, "Activation", (PyObject *)&PyBobLearnActivation_Type) < 0) return 0;
 
   Py_INCREF(&PyBobLearnIdentityActivation_Type);
-  PyModule_AddObject(m, "Identity", (PyObject *)&PyBobLearnIdentityActivation_Type);
+  if (PyModule_AddObject(m, "Identity", (PyObject *)&PyBobLearnIdentityActivation_Type) < 0) return 0;
 
   Py_INCREF(&PyBobLearnLinearActivation_Type);
-  PyModule_AddObject(m, "Linear", (PyObject *)&PyBobLearnLinearActivation_Type);
+  if (PyModule_AddObject(m, "Linear", (PyObject *)&PyBobLearnLinearActivation_Type) < 0) return 0;
 
   Py_INCREF(&PyBobLearnLogisticActivation_Type);
-  PyModule_AddObject(m, "Logistic", (PyObject *)&PyBobLearnLogisticActivation_Type);
+  if (PyModule_AddObject(m, "Logistic", (PyObject *)&PyBobLearnLogisticActivation_Type) < 0) return 0;
 
   Py_INCREF(&PyBobLearnHyperbolicTangentActivation_Type);
-  PyModule_AddObject(m, "HyperbolicTangent", (PyObject *)&PyBobLearnHyperbolicTangentActivation_Type);
+  if (PyModule_AddObject(m, "HyperbolicTangent", (PyObject *)&PyBobLearnHyperbolicTangentActivation_Type) < 0) return 0;
 
   Py_INCREF(&PyBobLearnMultipliedHyperbolicTangentActivation_Type);
-  PyModule_AddObject(m, "MultipliedHyperbolicTangent", (PyObject *)&PyBobLearnMultipliedHyperbolicTangentActivation_Type);
+  if (PyModule_AddObject(m, "MultipliedHyperbolicTangent", (PyObject *)&PyBobLearnMultipliedHyperbolicTangentActivation_Type) < 0) return 0;
 
   static void* PyXbobLearnActivation_API[PyXbobLearnActivation_API_pointers];
 
@@ -179,17 +152,17 @@ PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
 
   if (c_api_object) PyModule_AddObject(m, "_C_API", c_api_object);
 
-  /* imports the NumPy C-API */
-  import_array();
+  /* imports xbob.io C-API + dependencies */
+  if (import_xbob_io() < 0) return 0;
 
-  /* imports xbob.blitz C-API */
-  import_xbob_blitz();
-
-  /* imports xbob.io C-API */
-  import_xbob_io();
-
-# if PY_VERSION_HEX >= 0x03000000
+  Py_INCREF(m);
   return m;
-# endif
 
+}
+
+PyMODINIT_FUNC XBOB_EXT_ENTRY_NAME (void) {
+# if PY_VERSION_HEX >= 0x03000000
+  return
+# endif
+    create_module();
 }
