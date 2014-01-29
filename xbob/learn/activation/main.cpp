@@ -11,8 +11,9 @@
 #ifdef NO_IMPORT_ARRAY
 #undef NO_IMPORT_ARRAY
 #endif
-#include <xbob.io/api.h>
+#include <xbob.blitz/capi.h>
 #include <xbob.blitz/cleanup.h>
+#include <xbob.io/api.h>
 
 static PyMethodDef module_methods[] = {
     {0}  /* Sentinel */
