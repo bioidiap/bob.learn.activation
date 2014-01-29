@@ -153,6 +153,7 @@ static PyObject* create_module (void) {
   if (c_api_object) PyModule_AddObject(m, "_C_API", c_api_object);
 
   /* imports xbob.io C-API + dependencies */
+  if (import_xbob_blitz() < 0) return 0;
   if (import_xbob_io() < 0) return 0;
 
   Py_INCREF(m);

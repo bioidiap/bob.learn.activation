@@ -234,8 +234,6 @@ typedef struct {
 
 # if !defined(NO_IMPORT_ARRAY)
 
-#include <xbob.io/api.h>
-
   /**
    * Returns -1 on error, 0 on success. PyCapsule_Import will set an exception
    * if there's an error.
@@ -287,13 +285,6 @@ typedef struct {
 
     if (XBOB_LEARN_ACTIVATION_API_VERSION != imported_version) {
       PyErr_Format(PyExc_ImportError, "%s.%s import error: you compiled against API version 0x%04x, but are now importing an API with version 0x%04x which is not compatible - check your Python runtime environment for errors", BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_PREFIX), BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_NAME), XBOB_LEARN_ACTIVATION_API_VERSION, imported_version);
-      return -1;
-    }
-
-    /* Imports the xbob.blitz C-API */
-    if (import_xbob_io() < 0) {
-      PyErr_Print();
-      PyErr_SetString(PyExc_ImportError, "xbob.io failed to import");
       return -1;
     }
 
