@@ -168,6 +168,9 @@ static PyObject* create_module (void) {
   if (!externals) return 0;
   if (PyModule_AddObject(m, "externals", externals) < 0) return 0;
 
+  /* imports xbob.io C-API + dependencies */
+  if (import_xbob_blitz() < 0) return 0;
+
   Py_INCREF(m);
   return m;
 
