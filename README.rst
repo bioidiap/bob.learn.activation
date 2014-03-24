@@ -4,6 +4,14 @@
 
 .. image:: https://travis-ci.org/bioidiap/xbob.learn.activation.svg?branch=master
    :target: https://travis-ci.org/bioidiap/xbob.learn.activation
+.. image:: https://coveralls.io/repos/bioidiap/xbob.learn.activation/badge.png
+   :target: https://coveralls.io/r/bioidiap/xbob.learn.activation
+.. image:: http://img.shields.io/github/tag/bioidiap/xbob.learn.activation.png
+   :target: https://github.com/bioidiap/xbob.learn.activation
+.. image:: http://img.shields.io/pypi/v/xbob.learn.activation.png
+   :target: https://pypi.python.org/pypi/xbob.learn.activation
+.. image:: http://img.shields.io/pypi/dm/xbob.learn.activation.png
+   :target: https://pypi.python.org/pypi/xbob.learn.activation
 
 =======================================================
  Python bindings for bob.machine's Activation functors
