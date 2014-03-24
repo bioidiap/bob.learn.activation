@@ -21,6 +21,7 @@
 #endif
 #include <xbob.blitz/capi.h>
 #include <xbob.blitz/cleanup.h>
+#include <xbob.io/config.h>
 #include <xbob.learn.activation/config.h>
 
 static int dict_set(PyObject* d, const char* key, const char* value) {
