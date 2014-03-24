@@ -7,9 +7,6 @@
 
 #include <Python.h>
 
-#include <xbob.learn.activation/config.h>
-#include <xbob.io/api.h>
-
 #include <bob/config.h>
 
 #include <string>
@@ -24,6 +21,7 @@
 #endif
 #include <xbob.blitz/capi.h>
 #include <xbob.blitz/cleanup.h>
+#include <xbob.learn.activation/config.h>
 
 static int dict_set(PyObject* d, const char* key, const char* value) {
   PyObject* v = Py_BuildValue("s", value);
@@ -169,8 +167,6 @@ static PyObject* create_module (void) {
   PyObject* externals = build_version_dictionary();
   if (!externals) return 0;
   if (PyModule_AddObject(m, "externals", externals) < 0) return 0;
-
-  if (import_xbob_blitz() < 0) return 0;
 
   Py_INCREF(m);
   return m;
