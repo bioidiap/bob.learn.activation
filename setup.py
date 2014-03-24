@@ -13,7 +13,7 @@ package_dir = os.path.dirname(os.path.realpath(__file__))
 package_dir = os.path.join(package_dir, 'xbob', 'learn', 'activation', 'include')
 include_dirs = [package_dir, xbob.io.get_include()]
 
-packages = ['bob-machine >= 1.3']
+packages = ['bob-machine >= 1.2.2']
 version = '2.0.0a0'
 
 setup(
@@ -43,6 +43,14 @@ setup(
       ],
 
     ext_modules = [
+      Extension("xbob.learn.activation.version",
+        [
+          "xbob/learn/activation/version.cpp",
+          ],
+        packages = packages,
+        include_dirs = include_dirs,
+        version = version,
+        ),
       Extension("xbob.learn.activation._library",
         [
           "xbob/learn/activation/activation.cpp",
