@@ -21,7 +21,7 @@ setup(
     name='xbob.learn.activation',
     version=version,
     description='Bindings for bob.machine\'s Activation functors',
-    url='http://github.com/anjos/xbob.learn.activation',
+    url='http://github.com/bioidiap/xbob.learn.activation',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
