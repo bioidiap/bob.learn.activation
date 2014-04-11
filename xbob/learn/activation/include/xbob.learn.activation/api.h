@@ -20,11 +20,31 @@
  * C API functions *
  *******************/
 
+/* Enum defining entries in the function table */
+enum _PyBobLearnActivation_ENUM{
+  PyXbobLearnActivation_APIVersion_NUM = 0,
+  // Bindings for xbob.learn.activation.Activation
+  PyBobLearnActivation_Type_NUM,
+  PyBobLearnActivation_Check_NUM,
+  PyBobLearnActivation_NewFromActivation_NUM,
+  // Bindings for xbob.learn.activation.Identity
+  PyBobLearnIdentityActivation_Type_NUM,
+  // Bindings for xbob.learn.activation.Linear
+  PyBobLearnLinearActivation_Type_NUM,
+  // Bindings for xbob.learn.activation.Logistic
+  PyBobLearnLogisticActivation_Type_NUM,
+  // Bindings for xbob.learn.activation.HyperbolicTangent
+  PyBobLearnHyperbolicTangentActivation_Type_NUM,
+  // Bindings for xbob.learn.activation.MultipliedHyperbolicTangent
+  PyBobLearnMultipliedHyperbolicTangentActivation_Type_NUM,
+  // Total number of C API pointers
+  PyXbobLearnActivation_API_pointers
+};
+
 /**************
  * Versioning *
  **************/
 
-#define PyXbobLearnActivation_APIVersion_NUM 0
 #define PyXbobLearnActivation_APIVersion_TYPE int
 
 /*************************************************
@@ -36,14 +56,11 @@ typedef struct {
   boost::shared_ptr<bob::machine::Activation> cxx;
 } PyBobLearnActivationObject;
 
-#define PyBobLearnActivation_Type_NUM 1
 #define PyBobLearnActivation_Type_TYPE PyTypeObject
 
-#define PyBobLearnActivation_Check_NUM 2
 #define PyBobLearnActivation_Check_RET int
 #define PyBobLearnActivation_Check_PROTO (PyObject* o)
 
-#define PyBobLearnActivation_NewFromActivation_NUM 3
 #define PyBobLearnActivation_NewFromActivation_RET PyObject*
 #define PyBobLearnActivation_NewFromActivation_PROTO (boost::shared_ptr<bob::machine::Activation> a)
 
@@ -56,7 +73,6 @@ typedef struct {
   boost::shared_ptr<bob::machine::IdentityActivation> cxx;
 } PyBobLearnIdentityActivationObject;
 
-#define PyBobLearnIdentityActivation_Type_NUM 4
 #define PyBobLearnIdentityActivation_Type_TYPE PyTypeObject
 
 /*********************************************
@@ -68,7 +84,6 @@ typedef struct {
   boost::shared_ptr<bob::machine::LinearActivation> cxx;
 } PyBobLearnLinearActivationObject;
 
-#define PyBobLearnLinearActivation_Type_NUM 5
 #define PyBobLearnLinearActivation_Type_TYPE PyTypeObject
 
 /***********************************************
@@ -80,7 +95,6 @@ typedef struct {
   boost::shared_ptr<bob::machine::LogisticActivation> cxx;
 } PyBobLearnLogisticActivationObject;
 
-#define PyBobLearnLogisticActivation_Type_NUM 6
 #define PyBobLearnLogisticActivation_Type_TYPE PyTypeObject
 
 /********************************************************
@@ -92,7 +106,6 @@ typedef struct {
   boost::shared_ptr<bob::machine::HyperbolicTangentActivation> cxx;
 } PyBobLearnHyperbolicTangentActivationObject;
 
-#define PyBobLearnHyperbolicTangentActivation_Type_NUM 7
 #define PyBobLearnHyperbolicTangentActivation_Type_TYPE PyTypeObject
 
 /******************************************************************
@@ -104,11 +117,8 @@ typedef struct {
   boost::shared_ptr<bob::machine::MultipliedHyperbolicTangentActivation> cxx;
 } PyBobLearnMultipliedHyperbolicTangentActivationObject;
 
-#define PyBobLearnMultipliedHyperbolicTangentActivation_Type_NUM 8
 #define PyBobLearnMultipliedHyperbolicTangentActivation_Type_TYPE PyTypeObject
 
-/* Total number of C API pointers */
-#define PyXbobLearnActivation_API_pointers 9
 
 #ifdef XBOB_LEARN_ACTIVATION_MODULE
 
