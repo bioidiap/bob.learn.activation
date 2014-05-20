@@ -27,14 +27,24 @@ the import function:
 
      if (!m) return;
 
-     // imports the NumPy C-API
-     import_array();
+     // imports dependencies
+     if (import_xbob_blitz() < 0) {
+       PyErr_Print();
+       PyErr_SetString(PyExc_ImportError, "cannot import module");
+       return 0;
+     }
 
-     // imports blitz.array C-API
-     import_xbob_blitz();
+     if (import_xbob_io_base() < 0) {
+       PyErr_Print();
+       PyErr_SetString(PyExc_ImportError, "cannot import module");
+       return 0;
+     }
 
-     // imports xbob.io C-API
-     import_xbob_io();
+     if (import_xbob_learn_activation() < 0) {
+       PyErr_Print();
+       PyErr_SetString(PyExc_ImportError, "cannot import module");
+       return 0;
+     }
 
      // imports xbob.learn.activation C-API
      import_xbob_learn_activation();
