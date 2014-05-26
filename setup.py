@@ -4,24 +4,24 @@
 # Mon 16 Apr 08:18:08 2012 CEST
 
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['xbob.blitz', 'xbob.io.base']))
-from xbob.blitz.extension import Extension
-import xbob.io.base
+dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.io.base']))
+from bob.blitz.extension import Extension
+import bob.io.base
 
 import os
 package_dir = os.path.dirname(os.path.realpath(__file__))
-package_dir = os.path.join(package_dir, 'xbob', 'learn', 'activation', 'include')
-include_dirs = [package_dir, xbob.io.base.get_include()]
+package_dir = os.path.join(package_dir, 'bob', 'learn', 'activation', 'include')
+include_dirs = [package_dir, bob.io.base.get_include()]
 
 packages = ['bob-machine >= 1.2.2']
 version = '2.0.0a0'
 
 setup(
 
-    name='xbob.learn.activation',
+    name='bob.learn.activation',
     version=version,
     description='Bindings for bob.machine\'s Activation functors',
-    url='http://github.com/bioidiap/xbob.learn.activation',
+    url='http://github.com/bioidiap/bob.learn.activation',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
@@ -33,33 +33,33 @@ setup(
 
     install_requires=[
       'setuptools',
-      'xbob.blitz',
-      'xbob.io.base',
+      'bob.blitz',
+      'bob.io.base',
     ],
 
     namespace_packages=[
-      "xbob",
-      "xbob.learn",
+      "bob",
+      "bob.learn",
       ],
 
     ext_modules = [
-      Extension("xbob.learn.activation.version",
+      Extension("bob.learn.activation.version",
         [
-          "xbob/learn/activation/version.cpp",
+          "bob/learn/activation/version.cpp",
           ],
         packages = packages,
         include_dirs = include_dirs,
         version = version,
         ),
-      Extension("xbob.learn.activation._library",
+      Extension("bob.learn.activation._library",
         [
-          "xbob/learn/activation/activation.cpp",
-          "xbob/learn/activation/identity.cpp",
-          "xbob/learn/activation/linear.cpp",
-          "xbob/learn/activation/logistic.cpp",
-          "xbob/learn/activation/tanh.cpp",
-          "xbob/learn/activation/mult_tanh.cpp",
-          "xbob/learn/activation/main.cpp",
+          "bob/learn/activation/activation.cpp",
+          "bob/learn/activation/identity.cpp",
+          "bob/learn/activation/linear.cpp",
+          "bob/learn/activation/logistic.cpp",
+          "bob/learn/activation/tanh.cpp",
+          "bob/learn/activation/mult_tanh.cpp",
+          "bob/learn/activation/main.cpp",
           ],
         packages = packages,
         include_dirs = include_dirs,

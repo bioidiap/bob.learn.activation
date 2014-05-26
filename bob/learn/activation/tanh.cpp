@@ -5,11 +5,11 @@
  * @brief Implementation of the HyperbolicTangent Activation function
  */
 
-#define XBOB_LEARN_ACTIVATION_MODULE
-#include <xbob.learn.activation/api.h>
+#define BOB_LEARN_ACTIVATION_MODULE
+#include <bob.learn.activation/api.h>
 
 PyDoc_STRVAR(s_hyperbolictangentactivation_str,
-    XBOB_EXT_MODULE_PREFIX ".HyperbolicTangentActivation");
+    BOB_EXT_MODULE_PREFIX ".HyperbolicTangentActivation");
 
 PyDoc_STRVAR(s_hyperbolictangentactivation_doc,
 "HyperbolicTangentActivation() -> new HyperbolicTangentActivation\n\

@@ -5,16 +5,16 @@
  * @brief C/C++ Python API for activation functors in bob::machine
  */
 
-#ifndef XBOB_LEARN_ACTIVATION_H
-#define XBOB_LEARN_ACTIVATION_H
+#ifndef BOB_LEARN_ACTIVATION_H
+#define BOB_LEARN_ACTIVATION_H
 
 #include <Python.h>
-#include <xbob.learn.activation/config.h>
+#include <bob.learn.activation/config.h>
 #include <bob/machine/Activation.h>
 #include <bob/machine/LinearMachine.h>
 
-#define XBOB_LEARN_ACTIVATION_MODULE_PREFIX xbob.learn.activation
-#define XBOB_LEARN_ACTIVATION_MODULE_NAME _library
+#define BOB_LEARN_ACTIVATION_MODULE_PREFIX bob.learn.activation
+#define BOB_LEARN_ACTIVATION_MODULE_NAME _library
 
 /*******************
  * C API functions *
@@ -22,33 +22,33 @@
 
 /* Enum defining entries in the function table */
 enum _PyBobLearnActivation_ENUM{
-  PyXbobLearnActivation_APIVersion_NUM = 0,
-  // Bindings for xbob.learn.activation.Activation
+  PyBobLearnActivation_APIVersion_NUM = 0,
+  // Bindings for bob.learn.activation.Activation
   PyBobLearnActivation_Type_NUM,
   PyBobLearnActivation_Check_NUM,
   PyBobLearnActivation_NewFromActivation_NUM,
-  // Bindings for xbob.learn.activation.Identity
+  // Bindings for bob.learn.activation.Identity
   PyBobLearnIdentityActivation_Type_NUM,
-  // Bindings for xbob.learn.activation.Linear
+  // Bindings for bob.learn.activation.Linear
   PyBobLearnLinearActivation_Type_NUM,
-  // Bindings for xbob.learn.activation.Logistic
+  // Bindings for bob.learn.activation.Logistic
   PyBobLearnLogisticActivation_Type_NUM,
-  // Bindings for xbob.learn.activation.HyperbolicTangent
+  // Bindings for bob.learn.activation.HyperbolicTangent
   PyBobLearnHyperbolicTangentActivation_Type_NUM,
-  // Bindings for xbob.learn.activation.MultipliedHyperbolicTangent
+  // Bindings for bob.learn.activation.MultipliedHyperbolicTangent
   PyBobLearnMultipliedHyperbolicTangentActivation_Type_NUM,
   // Total number of C API pointers
-  PyXbobLearnActivation_API_pointers
+  PyBobLearnActivation_API_pointers
 };
 
 /**************
  * Versioning *
  **************/
 
-#define PyXbobLearnActivation_APIVersion_TYPE int
+#define PyBobLearnActivation_APIVersion_TYPE int
 
 /*************************************************
- * Bindings for xbob.learn.activation.Activation *
+ * Bindings for bob.learn.activation.Activation *
  *************************************************/
 
 typedef struct {
@@ -65,7 +65,7 @@ typedef struct {
 #define PyBobLearnActivation_NewFromActivation_PROTO (boost::shared_ptr<bob::machine::Activation> a)
 
 /***********************************************
- * Bindings for xbob.learn.activation.Identity *
+ * Bindings for bob.learn.activation.Identity *
  ***********************************************/
 
 typedef struct {
@@ -76,7 +76,7 @@ typedef struct {
 #define PyBobLearnIdentityActivation_Type_TYPE PyTypeObject
 
 /*********************************************
- * Bindings for xbob.learn.activation.Linear *
+ * Bindings for bob.learn.activation.Linear *
  *********************************************/
 
 typedef struct {
@@ -87,7 +87,7 @@ typedef struct {
 #define PyBobLearnLinearActivation_Type_TYPE PyTypeObject
 
 /***********************************************
- * Bindings for xbob.learn.activation.Logistic *
+ * Bindings for bob.learn.activation.Logistic *
  ***********************************************/
 
 typedef struct {
@@ -98,7 +98,7 @@ typedef struct {
 #define PyBobLearnLogisticActivation_Type_TYPE PyTypeObject
 
 /********************************************************
- * Bindings for xbob.learn.activation.HyperbolicTangent *
+ * Bindings for bob.learn.activation.HyperbolicTangent *
  ********************************************************/
 
 typedef struct {
@@ -109,7 +109,7 @@ typedef struct {
 #define PyBobLearnHyperbolicTangentActivation_Type_TYPE PyTypeObject
 
 /******************************************************************
- * Bindings for xbob.learn.activation.MultipliedHyperbolicTangent *
+ * Bindings for bob.learn.activation.MultipliedHyperbolicTangent *
  ******************************************************************/
 
 typedef struct {
@@ -120,18 +120,18 @@ typedef struct {
 #define PyBobLearnMultipliedHyperbolicTangentActivation_Type_TYPE PyTypeObject
 
 
-#ifdef XBOB_LEARN_ACTIVATION_MODULE
+#ifdef BOB_LEARN_ACTIVATION_MODULE
 
-  /* This section is used when compiling `xbob.learn.activation' itself */
+  /* This section is used when compiling `bob.learn.activation' itself */
 
   /**************
    * Versioning *
    **************/
 
-  extern int PyXbobLearnActivation_APIVersion;
+  extern int PyBobLearnActivation_APIVersion;
 
   /*************************************************
-   * Bindings for xbob.learn.activation.Activation *
+   * Bindings for bob.learn.activation.Activation *
    *************************************************/
 
   extern PyBobLearnActivation_Type_TYPE PyBobLearnActivation_Type;
@@ -141,38 +141,38 @@ typedef struct {
   PyBobLearnActivation_NewFromActivation_RET PyBobLearnActivation_NewFromActivation PyBobLearnActivation_NewFromActivation_PROTO;
 
   /***********************************************
-   * Bindings for xbob.learn.activation.Identity *
+   * Bindings for bob.learn.activation.Identity *
    ***********************************************/
 
   extern PyBobLearnIdentityActivation_Type_TYPE PyBobLearnIdentityActivation_Type;
 
   /*********************************************
-   * Bindings for xbob.learn.activation.Linear *
+   * Bindings for bob.learn.activation.Linear *
    *********************************************/
 
   extern PyBobLearnLinearActivation_Type_TYPE PyBobLearnLinearActivation_Type;
 
   /***********************************************
-   * Bindings for xbob.learn.activation.Logistic *
+   * Bindings for bob.learn.activation.Logistic *
    ***********************************************/
 
   extern PyBobLearnLogisticActivation_Type_TYPE PyBobLearnLogisticActivation_Type;
 
   /********************************************************
-   * Bindings for xbob.learn.activation.HyperbolicTangent *
+   * Bindings for bob.learn.activation.HyperbolicTangent *
    ********************************************************/
 
   extern PyBobLearnHyperbolicTangentActivation_Type_TYPE PyBobLearnHyperbolicTangentActivation_Type;
 
   /******************************************************************
-   * Bindings for xbob.learn.activation.MultipliedHyperbolicTangent *
+   * Bindings for bob.learn.activation.MultipliedHyperbolicTangent *
    ******************************************************************/
 
   extern PyBobLearnMultipliedHyperbolicTangentActivation_Type_TYPE PyBobLearnMultipliedHyperbolicTangentActivation_Type;
 
 #else
 
-  /* This section is used in modules that use `xbob.learn.activation's' C-API */
+  /* This section is used in modules that use `bob.learn.activation's' C-API */
 
 /************************************************************************
  * Macros to avoid symbol collision and allow for separate compilation. *
@@ -181,18 +181,18 @@ typedef struct {
  ************************************************************************/
 
 #  if defined(PY_ARRAY_UNIQUE_SYMBOL)
-#    define XBOB_LEARN_ACTIVATION_MAKE_API_NAME_INNER(a) XBOB_LEARN_ACTIVATION_ ## a
-#    define XBOB_LEARN_ACTIVATION_MAKE_API_NAME(a) XBOB_LEARN_ACTIVATION_MAKE_API_NAME_INNER(a)
-#    define PyXbobLearnActivation_API XBOB_LEARN_ACTIVATION_MAKE_API_NAME(PY_ARRAY_UNIQUE_SYMBOL)
+#    define BOB_LEARN_ACTIVATION_MAKE_API_NAME_INNER(a) BOB_LEARN_ACTIVATION_ ## a
+#    define BOB_LEARN_ACTIVATION_MAKE_API_NAME(a) BOB_LEARN_ACTIVATION_MAKE_API_NAME_INNER(a)
+#    define PyBobLearnActivation_API BOB_LEARN_ACTIVATION_MAKE_API_NAME(PY_ARRAY_UNIQUE_SYMBOL)
 #  endif
 
 #  if defined(NO_IMPORT_ARRAY)
-  extern void **PyXbobLearnActivation_API;
+  extern void **PyBobLearnActivation_API;
 #  else
 #    if defined(PY_ARRAY_UNIQUE_SYMBOL)
-  void **PyXbobLearnActivation_API;
+  void **PyBobLearnActivation_API;
 #    else
-  static void **PyXbobLearnActivation_API=NULL;
+  static void **PyBobLearnActivation_API=NULL;
 #    endif
 #  endif
 
@@ -200,47 +200,47 @@ typedef struct {
    * Versioning *
    **************/
 
-# define PyXbobLearnActivation_APIVersion (*(PyXbobLearnActivation_APIVersion_TYPE *)PyXbobLearnActivation_API[PyXbobLearnActivation_APIVersion_NUM])
+# define PyBobLearnActivation_APIVersion (*(PyBobLearnActivation_APIVersion_TYPE *)PyBobLearnActivation_API[PyBobLearnActivation_APIVersion_NUM])
 
   /*************************************************
-   * Bindings for xbob.learn.activation.Activation *
+   * Bindings for bob.learn.activation.Activation *
    *************************************************/
 
-# define PyBobLearnActivation_Type (*(PyBobLearnActivation_Type_TYPE *)PyXbobLearnActivation_API[PyBobLearnActivation_Type_NUM])
+# define PyBobLearnActivation_Type (*(PyBobLearnActivation_Type_TYPE *)PyBobLearnActivation_API[PyBobLearnActivation_Type_NUM])
 
-# define PyBobLearnActivation_Check (*(PyBobLearnActivation_Check_RET (*)PyBobLearnActivation_Check_PROTO) PyXbobLearnActivation_API[PyBobLearnActivation_Check_NUM])
+# define PyBobLearnActivation_Check (*(PyBobLearnActivation_Check_RET (*)PyBobLearnActivation_Check_PROTO) PyBobLearnActivation_API[PyBobLearnActivation_Check_NUM])
 
-# define PyBobLearnActivation_NewFromActivation (*(PyBobLearnActivation_NewFromActivation_RET (*)PyBobLearnActivation_NewFromActivation_PROTO) PyXbobLearnActivation_API[PyBobLearnActivation_NewFromActivation_NUM])
+# define PyBobLearnActivation_NewFromActivation (*(PyBobLearnActivation_NewFromActivation_RET (*)PyBobLearnActivation_NewFromActivation_PROTO) PyBobLearnActivation_API[PyBobLearnActivation_NewFromActivation_NUM])
 
   /***********************************************
-   * Bindings for xbob.learn.activation.Identity *
+   * Bindings for bob.learn.activation.Identity *
    ***********************************************/
 
-# define PyBobLearnIdentityActivation_Type (*(PyBobLearnIdentityActivation_Type_TYPE *)PyXbobLearnActivation_API[PyBobLearnIdentityActivation_Type_NUM])
+# define PyBobLearnIdentityActivation_Type (*(PyBobLearnIdentityActivation_Type_TYPE *)PyBobLearnActivation_API[PyBobLearnIdentityActivation_Type_NUM])
 
   /*********************************************
-   * Bindings for xbob.learn.activation.Linear *
+   * Bindings for bob.learn.activation.Linear *
    *********************************************/
 
-# define PyBobLearnLinearActivation_Type (*(PyBobLearnLinearActivation_Type_TYPE *)PyXbobLearnActivation_API[PyBobLearnLinearActivation_Type_NUM])
+# define PyBobLearnLinearActivation_Type (*(PyBobLearnLinearActivation_Type_TYPE *)PyBobLearnActivation_API[PyBobLearnLinearActivation_Type_NUM])
 
   /***********************************************
-   * Bindings for xbob.learn.activation.Logistic *
+   * Bindings for bob.learn.activation.Logistic *
    ***********************************************/
 
-# define PyBobLearnLogisticActivation_Type (*(PyBobLearnLogisticActivation_Type_TYPE *)PyXbobLearnActivation_API[PyBobLearnLogisticActivation_Type_NUM])
+# define PyBobLearnLogisticActivation_Type (*(PyBobLearnLogisticActivation_Type_TYPE *)PyBobLearnActivation_API[PyBobLearnLogisticActivation_Type_NUM])
 
   /********************************************************
-   * Bindings for xbob.learn.activation.HyperbolicTangent *
+   * Bindings for bob.learn.activation.HyperbolicTangent *
    ********************************************************/
 
-# define PyBobLearnHyperbolicTangentActivation_Type (*(PyBobLearnHyperbolicTangentActivation_Type_TYPE *)PyXbobLearnActivation_API[PyBobLearnHyperbolicTangentActivation_Type_NUM])
+# define PyBobLearnHyperbolicTangentActivation_Type (*(PyBobLearnHyperbolicTangentActivation_Type_TYPE *)PyBobLearnActivation_API[PyBobLearnHyperbolicTangentActivation_Type_NUM])
 
   /******************************************************************
-   * Bindings for xbob.learn.activation.MultipliedHyperbolicTangent *
+   * Bindings for bob.learn.activation.MultipliedHyperbolicTangent *
    ******************************************************************/
 
-# define PyBobLearnMultipliedHyperbolicTangentActivation_Type (*(PyBobLearnMultipliedHyperbolicTangentActivation_Type_TYPE *)PyXbobLearnActivation_API[PyBobLearnMultipliedHyperbolicTangentActivation_Type_NUM])
+# define PyBobLearnMultipliedHyperbolicTangentActivation_Type (*(PyBobLearnMultipliedHyperbolicTangentActivation_Type_TYPE *)PyBobLearnActivation_API[PyBobLearnMultipliedHyperbolicTangentActivation_Type_NUM])
 
 # if !defined(NO_IMPORT_ARRAY)
 
@@ -248,12 +248,12 @@ typedef struct {
    * Returns -1 on error, 0 on success. PyCapsule_Import will set an exception
    * if there's an error.
    */
-  static int import_xbob_learn_activation(void) {
+  static int import_bob_learn_activation(void) {
 
     PyObject *c_api_object;
     PyObject *module;
 
-    module = PyImport_ImportModule(BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_PREFIX) "." BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_NAME));
+    module = PyImport_ImportModule(BOOST_PP_STRINGIZE(BOB_LEARN_ACTIVATION_MODULE_PREFIX) "." BOOST_PP_STRINGIZE(BOB_LEARN_ACTIVATION_MODULE_NAME));
 
     if (module == NULL) return -1;
 
@@ -266,35 +266,35 @@ typedef struct {
 
 #   if PY_VERSION_HEX >= 0x02070000
     if (PyCapsule_CheckExact(c_api_object)) {
-      PyXbobLearnActivation_API = (void **)PyCapsule_GetPointer(c_api_object,
+      PyBobLearnActivation_API = (void **)PyCapsule_GetPointer(c_api_object,
           PyCapsule_GetName(c_api_object));
     }
 #   else
     if (PyCObject_Check(c_api_object)) {
-      PyXbobLearnActivation_API = (void **)PyCObject_AsVoidPtr(c_api_object);
+      PyBobLearnActivation_API = (void **)PyCObject_AsVoidPtr(c_api_object);
     }
 #   endif
 
     Py_DECREF(c_api_object);
     Py_DECREF(module);
 
-    if (!PyXbobLearnActivation_API) {
+    if (!PyBobLearnActivation_API) {
       PyErr_Format(PyExc_ImportError,
 #   if PY_VERSION_HEX >= 0x02070000
           "cannot find C/C++ API capsule at `%s.%s._C_API'",
 #   else
           "cannot find C/C++ API cobject at `%s.%s._C_API'",
 #   endif
-          BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_PREFIX),
-          BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_NAME));
+          BOOST_PP_STRINGIZE(BOB_LEARN_ACTIVATION_MODULE_PREFIX),
+          BOOST_PP_STRINGIZE(BOB_LEARN_ACTIVATION_MODULE_NAME));
       return -1;
     }
 
     /* Checks that the imported version matches the compiled version */
-    int imported_version = *(int*)PyXbobLearnActivation_API[PyXbobLearnActivation_APIVersion_NUM];
+    int imported_version = *(int*)PyBobLearnActivation_API[PyBobLearnActivation_APIVersion_NUM];
 
-    if (XBOB_LEARN_ACTIVATION_API_VERSION != imported_version) {
-      PyErr_Format(PyExc_ImportError, "%s.%s import error: you compiled against API version 0x%04x, but are now importing an API with version 0x%04x which is not compatible - check your Python runtime environment for errors", BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_PREFIX), BOOST_PP_STRINGIZE(XBOB_LEARN_ACTIVATION_MODULE_NAME), XBOB_LEARN_ACTIVATION_API_VERSION, imported_version);
+    if (BOB_LEARN_ACTIVATION_API_VERSION != imported_version) {
+      PyErr_Format(PyExc_ImportError, "%s.%s import error: you compiled against API version 0x%04x, but are now importing an API with version 0x%04x which is not compatible - check your Python runtime environment for errors", BOOST_PP_STRINGIZE(BOB_LEARN_ACTIVATION_MODULE_PREFIX), BOOST_PP_STRINGIZE(BOB_LEARN_ACTIVATION_MODULE_NAME), BOB_LEARN_ACTIVATION_API_VERSION, imported_version);
       return -1;
     }
 
@@ -305,6 +305,6 @@ typedef struct {
 
 # endif //!defined(NO_IMPORT_ARRAY)
 
-#endif /* XBOB_LEARN_ACTIVATION_MODULE */
+#endif /* BOB_LEARN_ACTIVATION_MODULE */
 
-#endif /* XBOB_LEARN_ACTIVATION_H */
+#endif /* BOB_LEARN_ACTIVATION_H */

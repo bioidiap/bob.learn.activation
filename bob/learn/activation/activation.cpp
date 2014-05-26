@@ -7,11 +7,11 @@
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
 
-#define XBOB_LEARN_ACTIVATION_MODULE
-#include <xbob.learn.activation/api.h>
-#include <xbob.io.base/api.h>
-#include <xbob.blitz/cppapi.h>
-#include <xbob.blitz/cleanup.h>
+#define BOB_LEARN_ACTIVATION_MODULE
+#include <bob.learn.activation/api.h>
+#include <bob.io.base/api.h>
+#include <bob.blitz/cppapi.h>
+#include <bob.blitz/cleanup.h>
 #include <bob/machine/Activation.h>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
@@ -21,7 +21,7 @@
  * Implementation of Activation base class *
  *******************************************/
 
-PyDoc_STRVAR(s_activation_str, XBOB_EXT_MODULE_PREFIX ".Activation");
+PyDoc_STRVAR(s_activation_str, BOB_EXT_MODULE_PREFIX ".Activation");
 
 PyDoc_STRVAR(s_activation_doc,
 "Base class for activation functors.\n\
@@ -429,7 +429,7 @@ PyDoc_STRVAR(s_load_str, "load");
 PyDoc_STRVAR(s_load_doc,
 "o.load(f) -> None\n\
 \n\
-Loads itself from a :py:class:`xbob.io.HDF5File`\n\
+Loads itself from a :py:class:`bob.io.HDF5File`\n\
 \n\
 ");
 
@@ -463,7 +463,7 @@ PyDoc_STRVAR(s_save_str, "save");
 PyDoc_STRVAR(s_save_doc,
 "o.save(f) -> None\n\
 \n\
-Saves itself to a :py:class:`xbob.io.HDF5File`\n\
+Saves itself to a :py:class:`bob.io.HDF5File`\n\
 \n\
 ");
 

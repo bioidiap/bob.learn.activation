@@ -2,16 +2,16 @@
 .. Andre Anjos <andre.anjos@idiap.ch>
 .. Fri 13 Dec 2013 12:35:22 CET
 
-.. image:: https://travis-ci.org/bioidiap/xbob.learn.activation.svg?branch=master
-   :target: https://travis-ci.org/bioidiap/xbob.learn.activation
-.. image:: https://coveralls.io/repos/bioidiap/xbob.learn.activation/badge.png
-   :target: https://coveralls.io/r/bioidiap/xbob.learn.activation
-.. image:: http://img.shields.io/github/tag/bioidiap/xbob.learn.activation.png
-   :target: https://github.com/bioidiap/xbob.learn.activation
-.. image:: http://img.shields.io/pypi/v/xbob.learn.activation.png
-   :target: https://pypi.python.org/pypi/xbob.learn.activation
-.. image:: http://img.shields.io/pypi/dm/xbob.learn.activation.png
-   :target: https://pypi.python.org/pypi/xbob.learn.activation
+.. image:: https://travis-ci.org/bioidiap/bob.learn.activation.svg?branch=master
+   :target: https://travis-ci.org/bioidiap/bob.learn.activation
+.. image:: https://coveralls.io/repos/bioidiap/bob.learn.activation/badge.png
+   :target: https://coveralls.io/r/bioidiap/bob.learn.activation
+.. image:: http://img.shields.io/github/tag/bioidiap/bob.learn.activation.png
+   :target: https://github.com/bioidiap/bob.learn.activation
+.. image:: http://img.shields.io/pypi/v/bob.learn.activation.png
+   :target: https://pypi.python.org/pypi/bob.learn.activation
+.. image:: http://img.shields.io/pypi/dm/bob.learn.activation.png
+   :target: https://pypi.python.org/pypi/bob.learn.activation
 
 =======================================================
  Python bindings for bob.machine's Activation functors
@@ -42,7 +42,7 @@ Testing
 
 You can run a set of tests using the nose test runner::
 
-  $ nosetests -sv xbob.learn.activation
+  $ nosetests -sv bob.learn.activation
 
 .. warning::
 
@@ -59,7 +59,7 @@ You can run our documentation tests using sphinx itself::
 
 You can test overall test coverage with::
 
-  $ nosetests --with-coverage --cover-package=xbob.learn.activation
+  $ nosetests --with-coverage --cover-package=bob.learn.activation
 
 The ``coverage`` egg must be installed for this to work properly.
 

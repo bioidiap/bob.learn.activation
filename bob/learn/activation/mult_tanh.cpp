@@ -5,11 +5,11 @@
  * @brief Implementation of the MultipliedHyperbolicTangent Activation function
  */
 
-#define XBOB_LEARN_ACTIVATION_MODULE
-#include <xbob.learn.activation/api.h>
+#define BOB_LEARN_ACTIVATION_MODULE
+#include <bob.learn.activation/api.h>
 
 PyDoc_STRVAR(s_multtanhactivation_str,
-    XBOB_EXT_MODULE_PREFIX ".MultipliedHyperbolicTangent");
+    BOB_EXT_MODULE_PREFIX ".MultipliedHyperbolicTangent");
 
 PyDoc_STRVAR(s_multtanhactivation_doc,
 "MultipliedHyperbolicTangentActivation([C=1.0, [M=1.0]]) -> new multiplied hyperbolic tangent functor\n\

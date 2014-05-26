@@ -6,11 +6,11 @@
  C++ API
 =========
 
-The C++ API of ``xbob.learn.activation`` allows users to leverage from
-automatic converters for classes in :py:class:`xbob.learn.activation`.  To use
+The C++ API of ``bob.learn.activation`` allows users to leverage from
+automatic converters for classes in :py:class:`bob.learn.activation`.  To use
 the C API, clients should first, include the header file
-``<xbob.learn.activation/api.h>`` on their compilation units and then, make
-sure to call once ``import_xbob_learn_activation()`` at their module
+``<bob.learn.activation/api.h>`` on their compilation units and then, make
+sure to call once ``import_bob_learn_activation()`` at their module
 instantiation, as explained at the `Python manual
 <http://docs.python.org/2/extending/extending.html#using-capsules>`_.
 
@@ -19,7 +19,7 @@ the import function:
 
 .. code-block:: c++
 
-   #include <xbob.learn.activation/api.h>
+   #include <bob.learn.activation/api.h>
 
    PyMODINIT_FUNC initclient(void) {
 
@@ -28,33 +28,33 @@ the import function:
      if (!m) return;
 
      // imports dependencies
-     if (import_xbob_blitz() < 0) {
+     if (import_bob_blitz() < 0) {
        PyErr_Print();
        PyErr_SetString(PyExc_ImportError, "cannot import module");
        return 0;
      }
 
-     if (import_xbob_io_base() < 0) {
+     if (import_bob_io_base() < 0) {
        PyErr_Print();
        PyErr_SetString(PyExc_ImportError, "cannot import module");
        return 0;
      }
 
-     if (import_xbob_learn_activation() < 0) {
+     if (import_bob_learn_activation() < 0) {
        PyErr_Print();
        PyErr_SetString(PyExc_ImportError, "cannot import module");
        return 0;
      }
 
-     // imports xbob.learn.activation C-API
-     import_xbob_learn_activation();
+     // imports bob.learn.activation C-API
+     import_bob_learn_activation();
 
    }
 
 .. note::
 
   The include directory can be discovered using
-  :py:func:`xbob.learn.activation.get_include`.
+  :py:func:`bob.learn.activation.get_include`.
 
 Activation Functors
 -------------------

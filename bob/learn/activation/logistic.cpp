@@ -2,24 +2,23 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Mon 13 Jan 2014 17:25:32 CET
  *
- * @brief Implementation of the Identity Activation function
+ * @brief Implementation of the Logistic Activation function
  */
 
-#define XBOB_LEARN_ACTIVATION_MODULE
-#include <xbob.learn.activation/api.h>
+#define BOB_LEARN_ACTIVATION_MODULE
+#include <bob.learn.activation/api.h>
 
-PyDoc_STRVAR(s_identityactivation_str,
-    XBOB_EXT_MODULE_PREFIX ".Identity");
+PyDoc_STRVAR(s_logisticactivation_str, BOB_EXT_MODULE_PREFIX ".Logistic");
 
-PyDoc_STRVAR(s_identityactivation_doc,
-"Identity() -> new Identity activation functor\n\
+PyDoc_STRVAR(s_logisticactivation_doc,
+"Logistic() -> new Logistic activation functor\n\
 \n\
-Computes :math:`f(z) = z` as activation function.\n\
+Computes :math:`f(z) = 1/(1+ e^{-z})` as activation function.\n\
 \n\
 ");
 
-static int PyBobLearnIdentityActivation_init
-(PyBobLearnIdentityActivationObject* self, PyObject* args, PyObject* kwds) {
+static int PyBobLearnLogisticActivation_init
+(PyBobLearnLogisticActivationObject* self, PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
   static const char* const_kwlist[] = {0};
@@ -28,13 +27,13 @@ static int PyBobLearnIdentityActivation_init
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "", kwlist)) return -1;
 
   try {
-    self->cxx.reset(new bob::machine::IdentityActivation());
+    self->cxx.reset(new bob::machine::LogisticActivation());
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());
   }
   catch (...) {
-    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", s_identityactivation_str);
+    PyErr_Format(PyExc_RuntimeError, "cannot create new object of type `%s' - unknown exception thrown", s_logisticactivation_str);
   }
 
   self->parent.cxx = self->cxx;
@@ -45,8 +44,8 @@ static int PyBobLearnIdentityActivation_init
 
 }
 
-static void PyBobLearnIdentityActivation_delete
-(PyBobLearnIdentityActivationObject* self) {
+static void PyBobLearnLogisticActivation_delete
+(PyBobLearnLogisticActivationObject* self) {
 
   self->parent.cxx.reset();
   self->cxx.reset();
@@ -54,12 +53,12 @@ static void PyBobLearnIdentityActivation_delete
 
 }
 
-PyTypeObject PyBobLearnIdentityActivation_Type = {
+PyTypeObject PyBobLearnLogisticActivation_Type = {
     PyVarObject_HEAD_INIT(0, 0)
-    s_identityactivation_str,                           /*tp_name*/
-    sizeof(PyBobLearnIdentityActivationObject),         /*tp_basicsize*/
+    s_logisticactivation_str,                           /*tp_name*/
+    sizeof(PyBobLearnLogisticActivationObject),         /*tp_basicsize*/
     0,                                                  /*tp_itemsize*/
-    (destructor)PyBobLearnIdentityActivation_delete,    /*tp_dealloc*/
+    (destructor)PyBobLearnLogisticActivation_delete,    /*tp_dealloc*/
     0,                                                  /*tp_print*/
     0,                                                  /*tp_getattr*/
     0,                                                  /*tp_setattr*/
@@ -75,7 +74,7 @@ PyTypeObject PyBobLearnIdentityActivation_Type = {
     0,                                                  /*tp_setattro*/
     0,                                                  /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,           /*tp_flags*/
-    s_identityactivation_doc,                           /* tp_doc */
+    s_logisticactivation_doc,                           /* tp_doc */
     0,		                                              /* tp_traverse */
     0,		                                              /* tp_clear */
     0,                                                  /* tp_richcompare */
@@ -90,7 +89,7 @@ PyTypeObject PyBobLearnIdentityActivation_Type = {
     0,                                                  /* tp_descr_get */
     0,                                                  /* tp_descr_set */
     0,                                                  /* tp_dictoffset */
-    (initproc)PyBobLearnIdentityActivation_init,        /* tp_init */
+    (initproc)PyBobLearnLogisticActivation_init,        /* tp_init */
     0,                                                  /* tp_alloc */
     0,                                                  /* tp_new */
 };
