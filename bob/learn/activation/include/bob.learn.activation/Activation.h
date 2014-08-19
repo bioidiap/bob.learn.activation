@@ -92,7 +92,7 @@ namespace bob { namespace learn { namespace activation {
       virtual double f (double z) const { return z; }
       virtual double f_prime (double z) const { return 1.; }
       virtual double f_prime_from_f (double a) const { return 1.; }
-      virtual std::string unique_identifier() const { return "bob.machine.Activation.Identity"; }
+      virtual std::string unique_identifier() const { return "bob.learn.activation.Activation.Identity"; }
       virtual std::string str() const { return "f(z) = z"; }
 
   };
@@ -112,7 +112,7 @@ namespace bob { namespace learn { namespace activation {
       double C() const { return m_C; }
       virtual void save(bob::io::base::HDF5File& f) const { Activation::save(f); f.set("C", m_C); }
       virtual void load(bob::io::base::HDF5File& f) { m_C = f.read<double>("C"); }
-      virtual std::string unique_identifier() const { return "bob.machine.Activation.Linear"; }
+      virtual std::string unique_identifier() const { return "bob.learn.activation.Activation.Linear"; }
       virtual std::string str() const { return (boost::format("f(z) = %.5e * z") % m_C).str(); }
 
     private: // representation
@@ -131,7 +131,7 @@ namespace bob { namespace learn { namespace activation {
       virtual ~HyperbolicTangentActivation() {}
       virtual double f (double z) const { return std::tanh(z); }
       virtual double f_prime_from_f (double a) const { return (1. - (a*a)); }
-      virtual std::string unique_identifier() const { return "bob.machine.Activation.HyperbolicTangent"; }
+      virtual std::string unique_identifier() const { return "bob.learn.activation.Activation.HyperbolicTangent"; }
       virtual std::string str() const { return "f(z) = tanh(z)"; }
 
   };
@@ -151,7 +151,7 @@ namespace bob { namespace learn { namespace activation {
       double M() const { return m_M; }
       virtual void save(bob::io::base::HDF5File& f) const { Activation::save(f); f.set("C", m_C); f.set("M", m_C); }
       virtual void load(bob::io::base::HDF5File& f) {m_C = f.read<double>("C"); m_M = f.read<double>("M"); }
-      virtual std::string unique_identifier() const { return "bob.machine.Activation.MultipliedHyperbolicTangent"; }
+      virtual std::string unique_identifier() const { return "bob.learn.activation.Activation.MultipliedHyperbolicTangent"; }
       virtual std::string str() const { return (boost::format("f(z) = %.5e * tanh(%.5e * z)") % m_C % m_M).str(); }
 
     private: // representation
@@ -171,7 +171,7 @@ namespace bob { namespace learn { namespace activation {
       virtual ~LogisticActivation() {}
       virtual double f (double z) const { return 1. / ( 1. + std::exp(-z) ); }
       virtual double f_prime_from_f (double a) const { return a * (1. - a); }
-      virtual std::string unique_identifier() const { return "bob.machine.Activation.Logistic"; }
+      virtual std::string unique_identifier() const { return "bob.learn.activation.Activation.Logistic"; }
       virtual std::string str() const { return "f(z) = 1./(1. + e^-z)"; }
 
   };

@@ -9,6 +9,7 @@
 
 #include <bob.learn.activation/Activation.h>
 #include <boost/make_shared.hpp>
+#include <bob.core/logging.h>
 
 boost::shared_ptr<bob::learn::activation::ActivationRegistry> bob::learn::activation::ActivationRegistry::instance() {
   static boost::shared_ptr<bob::learn::activation::ActivationRegistry> s_instance(new ActivationRegistry());
@@ -70,6 +71,20 @@ bob::learn::activation::activation_factory_t bob::learn::activation::ActivationR
   auto it = s_id2factory.find(id);
 
   if (it == s_id2factory.end()) {
+    // try to convert the old "machine" name into the new "learn.activation" name
+    auto i = id.find("machine");
+    if (i != std::string::npos){
+      std::string tid = id;
+      tid.replace(i, 7, "learn.activation");
+
+      it = s_id2factory.find(tid);
+      if (it != s_id2factory.end()) {
+        bob::core::warn << "Using the old name of the activation function '" << id << "' is deprecated. Please use '" << tid << "' instead!";
+      }
+    }
+  }
+
+  if (it == s_id2factory.end()) {
     boost::format m("unregistered activation function: %s");
     m % id;
     throw std::runtime_error(m.str());
@@ -78,4 +93,30 @@ bob::learn::activation::activation_factory_t bob::learn::activation::ActivationR
   return it->second;
 
 }
+
+/**
+ * A generalized registration mechanism for all classes above
+ */
+template <typename T> struct register_activation {
+
+  static boost::shared_ptr<bob::learn::activation::Activation> factory (bob::io::base::HDF5File& f) {
+    auto retval = boost::make_shared<T>();
+    retval->load(f);
+    return retval;
+  }
+
+  register_activation() {
+    T obj;
+    bob::learn::activation::ActivationRegistry::instance()->registerActivation(obj.unique_identifier(), register_activation<T>::factory);
+  }
+
+};
+
+// register all extensions
+static register_activation<bob::learn::activation::IdentityActivation> _identity_act_reg;
+static register_activation<bob::learn::activation::LinearActivation> _linear_act_reg;
+static register_activation<bob::learn::activation::HyperbolicTangentActivation> _tanh_act_reg;
+static register_activation<bob::learn::activation::MultipliedHyperbolicTangentActivation> _multanh_act_reg;
+static register_activation<bob::learn::activation::LogisticActivation> _logistic_act_reg;
+
 
