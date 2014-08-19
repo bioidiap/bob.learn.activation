@@ -2,7 +2,7 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Fri 10 Jan 2014 14:26:25 CET
  *
- * @brief Python bindings for the machine activation
+ * @brief Python bindings for bob::learn::activation
  *
  * Copyright (C) 2011-2014 Idiap Research Institute, Martigny, Switzerland
  */
@@ -12,7 +12,7 @@
 #include <bob.io.base/api.h>
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
-#include <bob/machine/Activation.h>
+#include <bob.learn.activation/Activation.h>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <structmember.h>
@@ -37,7 +37,7 @@ PyDoc_STRVAR(s_activation_doc,
    expect them to work fine with the C++ code, as no hook is\n\
    implemented as of this time to allow for this. You must create\n\
    a class that inherits from the C++\n\
-   :cpp:type:`bob::machine::Activation` in C++ and then bind it to\n\
+   :cpp:type:`bob::learn::activation::Activation` in C++ and then bind it to\n\
    Python like we have done for the classes available in these\n\
    bindings.\n\
 \n\
@@ -57,7 +57,7 @@ static PyObject* PyBobLearnActivation_new
 }
 
 PyObject* PyBobLearnActivation_NewFromActivation
-(boost::shared_ptr<bob::machine::Activation> a) {
+(boost::shared_ptr<bob::learn::activation::Activation> a) {
 
   PyBobLearnActivationObject* retval = (PyBobLearnActivationObject*)PyBobLearnActivation_new(&PyBobLearnActivation_Type, 0, 0);
 
@@ -131,7 +131,7 @@ static int apply(boost::function<double (double)> function,
 }
 
 static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* self,
-    double (bob::machine::Activation::*method) (double) const,
+    double (bob::learn::activation::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
@@ -195,7 +195,7 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* self,
 }
 
 static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* self,
-    double (bob::machine::Activation::*method) (double) const,
+    double (bob::learn::activation::Activation::*method) (double) const,
     PyObject* args, PyObject* kwds) {
 
   /* Parses input arguments in a single shot */
@@ -289,12 +289,12 @@ static PyObject* PyBobLearnActivation_call(PyBobLearnActivationObject* self,
 
     case 1:
       return PyBobLearnActivation_call1
-        (self, &bob::machine::Activation::f, args, kwds);
+        (self, &bob::learn::activation::Activation::f, args, kwds);
       break;
 
     case 2:
       return PyBobLearnActivation_call2
-        (self, &bob::machine::Activation::f, args, kwds);
+        (self, &bob::learn::activation::Activation::f, args, kwds);
       break;
 
     default:
@@ -341,12 +341,12 @@ static PyObject* PyBobLearnActivation_f_prime(PyBobLearnActivationObject* self,
 
     case 1:
       return PyBobLearnActivation_call1
-        (self, &bob::machine::Activation::f_prime, args, kwds);
+        (self, &bob::learn::activation::Activation::f_prime, args, kwds);
       break;
 
     case 2:
       return PyBobLearnActivation_call2
-        (self, &bob::machine::Activation::f_prime, args, kwds);
+        (self, &bob::learn::activation::Activation::f_prime, args, kwds);
       break;
 
     default:
@@ -393,12 +393,12 @@ static PyObject* PyBobLearnActivation_f_prime_from_f
 
     case 1:
       return PyBobLearnActivation_call1
-        (self, &bob::machine::Activation::f_prime_from_f, args, kwds);
+        (self, &bob::learn::activation::Activation::f_prime_from_f, args, kwds);
       break;
 
     case 2:
       return PyBobLearnActivation_call2
-        (self, &bob::machine::Activation::f_prime_from_f, args, kwds);
+        (self, &bob::learn::activation::Activation::f_prime_from_f, args, kwds);
       break;
 
     default:

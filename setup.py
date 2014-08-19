@@ -3,17 +3,12 @@
 # Andre Anjos <andre.anjos@idiap.ch>
 # Mon 16 Apr 08:18:08 2012 CEST
 
+bob_packages = ['bob.core', 'bob.io.base']
+
 from setuptools import setup, find_packages, dist
-dist.Distribution(dict(setup_requires=['bob.blitz', 'bob.io.base']))
-from bob.blitz.extension import Extension
-import bob.io.base
+dist.Distribution(dict(setup_requires=['bob.blitz'] + bob_packages))
+from bob.blitz.extension import Extension, Library, build_ext
 
-import os
-package_dir = os.path.dirname(os.path.realpath(__file__))
-package_dir = os.path.join(package_dir, 'bob', 'learn', 'activation', 'include')
-include_dirs = [package_dir, bob.io.base.get_include()]
-
-packages = ['bob-machine >= 1.2.2']
 version = '2.0.0a0'
 
 setup(
@@ -35,23 +30,32 @@ setup(
     install_requires=[
       'setuptools',
       'bob.blitz',
+      'bob.core',
       'bob.io.base',
     ],
 
     namespace_packages=[
       "bob",
       "bob.learn",
-      ],
+    ],
 
     ext_modules = [
       Extension("bob.learn.activation.version",
         [
           "bob/learn/activation/version.cpp",
-          ],
-        packages = packages,
-        include_dirs = include_dirs,
+        ],
+        bob_packages = bob_packages,
         version = version,
-        ),
+      ),
+
+      Library("bob.learn.activation.bob_learn_activation",
+        [
+          "bob/learn/activation/cpp/ActivationRegistry.cpp",
+        ],
+        bob_packages = bob_packages,
+        version = version,
+      ),
+
       Extension("bob.learn.activation._library",
         [
           "bob/learn/activation/activation.cpp",
@@ -61,12 +65,15 @@ setup(
           "bob/learn/activation/tanh.cpp",
           "bob/learn/activation/mult_tanh.cpp",
           "bob/learn/activation/main.cpp",
-          ],
-        packages = packages,
-        include_dirs = include_dirs,
+        ],
+        bob_packages = bob_packages,
         version = version,
-        ),
-      ],
+      ),
+    ],
+
+    cmdclass = {
+      'build_ext': build_ext
+    },
 
     classifiers = [
       'Development Status :: 3 - Alpha',
@@ -76,6 +83,6 @@ setup(
       'Programming Language :: Python',
       'Programming Language :: Python :: 3',
       'Topic :: Software Development :: Libraries :: Python Modules',
-      ],
+    ],
 
-    )
+  )

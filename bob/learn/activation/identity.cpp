@@ -28,7 +28,7 @@ static int PyBobLearnIdentityActivation_init
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "", kwlist)) return -1;
 
   try {
-    self->cxx.reset(new bob::machine::IdentityActivation());
+    self->cxx.reset(new bob::learn::activation::IdentityActivation());
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());

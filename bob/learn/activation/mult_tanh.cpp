@@ -21,7 +21,7 @@ Builds a new hyperbolic tangent activation function with a given\n\
 constant for the inner and outter products. Don't use this if you\n\
 just want to set the constants to the default values (1.0). In\n\
 such a case, prefer to use the more efficient\n\
-:py:class:`bob.machine.HyperbolicTangentActivation`.\n\
+:py:class:`bob.learn.activation.HyperbolicTangentActivation`.\n\
 ");
 
 static int PyBobLearnMultipliedHyperbolicTangentActivation_init
@@ -38,7 +38,7 @@ static int PyBobLearnMultipliedHyperbolicTangentActivation_init
     return -1;
 
   try {
-    self->cxx.reset(new bob::machine::MultipliedHyperbolicTangentActivation(C, M));
+    self->cxx.reset(new bob::learn::activation::MultipliedHyperbolicTangentActivation(C, M));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());

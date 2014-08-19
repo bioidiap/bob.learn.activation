@@ -33,7 +33,7 @@ static int PyBobLearnLinearActivation_init
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "|d", kwlist, &C)) return -1;
 
   try {
-    self->cxx.reset(new bob::machine::LinearActivation(C));
+    self->cxx.reset(new bob::learn::activation::LinearActivation(C));
   }
   catch (std::exception& ex) {
     PyErr_SetString(PyExc_RuntimeError, ex.what());

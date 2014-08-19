@@ -2,7 +2,7 @@
  * @author Andre Anjos <andre.anjos@idiap.ch>
  * @date Wed 15 Jan 2014 10:15:21 CET
  *
- * @brief C/C++ Python API for activation functors in bob::machine
+ * @brief C/C++ Python API for activation functors in bob::learn::activation
  */
 
 #ifndef BOB_LEARN_ACTIVATION_H
@@ -10,8 +10,7 @@
 
 #include <Python.h>
 #include <bob.learn.activation/config.h>
-#include <bob/machine/Activation.h>
-#include <bob/machine/LinearMachine.h>
+#include <bob.learn.activation/Activation.h>
 
 #define BOB_LEARN_ACTIVATION_MODULE_PREFIX bob.learn.activation
 #define BOB_LEARN_ACTIVATION_MODULE_NAME _library
@@ -53,7 +52,7 @@ enum _PyBobLearnActivation_ENUM{
 
 typedef struct {
   PyObject_HEAD
-  boost::shared_ptr<bob::machine::Activation> cxx;
+  boost::shared_ptr<bob::learn::activation::Activation> cxx;
 } PyBobLearnActivationObject;
 
 #define PyBobLearnActivation_Type_TYPE PyTypeObject
@@ -62,7 +61,7 @@ typedef struct {
 #define PyBobLearnActivation_Check_PROTO (PyObject* o)
 
 #define PyBobLearnActivation_NewFromActivation_RET PyObject*
-#define PyBobLearnActivation_NewFromActivation_PROTO (boost::shared_ptr<bob::machine::Activation> a)
+#define PyBobLearnActivation_NewFromActivation_PROTO (boost::shared_ptr<bob::learn::activation::Activation> a)
 
 /***********************************************
  * Bindings for bob.learn.activation.Identity *
@@ -70,7 +69,7 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  boost::shared_ptr<bob::machine::IdentityActivation> cxx;
+  boost::shared_ptr<bob::learn::activation::IdentityActivation> cxx;
 } PyBobLearnIdentityActivationObject;
 
 #define PyBobLearnIdentityActivation_Type_TYPE PyTypeObject
@@ -81,7 +80,7 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  boost::shared_ptr<bob::machine::LinearActivation> cxx;
+  boost::shared_ptr<bob::learn::activation::LinearActivation> cxx;
 } PyBobLearnLinearActivationObject;
 
 #define PyBobLearnLinearActivation_Type_TYPE PyTypeObject
@@ -92,7 +91,7 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  boost::shared_ptr<bob::machine::LogisticActivation> cxx;
+  boost::shared_ptr<bob::learn::activation::LogisticActivation> cxx;
 } PyBobLearnLogisticActivationObject;
 
 #define PyBobLearnLogisticActivation_Type_TYPE PyTypeObject
@@ -103,7 +102,7 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  boost::shared_ptr<bob::machine::HyperbolicTangentActivation> cxx;
+  boost::shared_ptr<bob::learn::activation::HyperbolicTangentActivation> cxx;
 } PyBobLearnHyperbolicTangentActivationObject;
 
 #define PyBobLearnHyperbolicTangentActivation_Type_TYPE PyTypeObject
@@ -114,7 +113,7 @@ typedef struct {
 
 typedef struct {
   PyBobLearnActivationObject parent;
-  boost::shared_ptr<bob::machine::MultipliedHyperbolicTangentActivation> cxx;
+  boost::shared_ptr<bob::learn::activation::MultipliedHyperbolicTangentActivation> cxx;
 } PyBobLearnMultipliedHyperbolicTangentActivationObject;
 
 #define PyBobLearnMultipliedHyperbolicTangentActivation_Type_TYPE PyTypeObject
