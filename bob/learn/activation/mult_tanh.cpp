@@ -12,7 +12,7 @@ PyDoc_STRVAR(s_multtanhactivation_str,
     BOB_EXT_MODULE_PREFIX ".MultipliedHyperbolicTangent");
 
 PyDoc_STRVAR(s_multtanhactivation_doc,
-"MultipliedHyperbolicTangentActivation([C=1.0, [M=1.0]]) -> new multiplied hyperbolic tangent functor\n\
+"MultipliedHyperbolicTangent([C=1.0, [M=1.0]]) -> new multiplied hyperbolic tangent functor\n\
 \n\
 Computes :math:`f(z) = C \\cdot \\tanh(Mz)` as activation\n\
 function.\n\
@@ -21,7 +21,7 @@ Builds a new hyperbolic tangent activation function with a given\n\
 constant for the inner and outter products. Don't use this if you\n\
 just want to set the constants to the default values (1.0). In\n\
 such a case, prefer to use the more efficient\n\
-:py:class:`bob.learn.activation.HyperbolicTangentActivation`.\n\
+:py:class:`HyperbolicTangent` activation.\n\
 ");
 
 static int PyBobLearnMultipliedHyperbolicTangentActivation_init

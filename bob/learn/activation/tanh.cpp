@@ -9,10 +9,10 @@
 #include <bob.learn.activation/api.h>
 
 PyDoc_STRVAR(s_hyperbolictangentactivation_str,
-    BOB_EXT_MODULE_PREFIX ".HyperbolicTangentActivation");
+    BOB_EXT_MODULE_PREFIX ".HyperbolicTangent");
 
 PyDoc_STRVAR(s_hyperbolictangentactivation_doc,
-"HyperbolicTangentActivation() -> new HyperbolicTangentActivation\n\
+"HyperbolicTangent() -> new HyperbolicTangent\n\
 \n\
 Computes :math:`f(z) = \\tanh(z)` as activation function.\n\
 \n\

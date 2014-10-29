@@ -18,7 +18,7 @@ Computes :math:`f(z) = C \\cdot z` as activation function.\n\
 The constructor builds a new linear activation function\n\
 with a given constant. Don't use this if you just want to\n\
 set constant to the default value (1.0). In such a case,\n\
-prefer to use the more efficient :py:class:`IdentityActivation`.\n\
+prefer to use the more efficient :py:class:`Identity` activation.\n\
 ");
 
 static int PyBobLearnLinearActivation_init

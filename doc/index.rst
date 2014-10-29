@@ -10,9 +10,8 @@
 
 .. todolist::
 
-This module contains some functionality from Bob bound to Python, available in
-the C++ counter-part ``bob::machine``. It includes Activation functors from the
-Machine Learning core.
+This module includes Activation functors from the Machine Learning core of Bob.
+These Activation functors are used in several other packages like `bob.learn.linear <http://pypi.python.org/pypi/bob.learn.linear>`_ or `bob.learn.mlp <http://pypi.python.org/pypi/bob.learn.mlp>`_.
 
 Documentation
 -------------
