@@ -8,10 +8,11 @@
  */
 
 #define BOB_LEARN_ACTIVATION_MODULE
-#include <bob.learn.activation/api.h>
-#include <bob.io.base/api.h>
 #include <bob.blitz/cppapi.h>
 #include <bob.blitz/cleanup.h>
+#include <bob.extension/defines.h>
+#include <bob.learn.activation/api.h>
+#include <bob.io.base/api.h>
 #include <bob.learn.activation/Activation.h>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
@@ -63,7 +64,7 @@ PyObject* PyBobLearnActivation_NewFromActivation
 
   retval->cxx = a;
 
-  return reinterpret_cast<PyObject*>(retval);
+  return Py_BuildValue("N", retval);
 
 }
 
@@ -174,12 +175,11 @@ static PyObject* PyBobLearnActivation_call1(PyBobLearnActivationObject* self,
       return 0;
     }
 
-    Py_INCREF(res);
-    return PyBlitzArray_NUMPY_WRAP(res);
+    return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", res));
 
   }
 
-  else if (PyNumber_Check(z)) {
+  else if (PyBob_NumberCheck(z)) {
 
     PyObject* z_float = PyNumber_Float(z);
     auto z_float_ = make_safe(z_float);
@@ -251,8 +251,7 @@ static PyObject* PyBobLearnActivation_call2(PyBobLearnActivationObject* self,
     return 0;
   }
 
-  Py_INCREF(res);
-  return PyBlitzArray_NUMPY_WRAP(reinterpret_cast<PyObject*>(res));
+  return PyBlitzArray_NUMPY_WRAP(Py_BuildValue("O", res));
 
 }
 
