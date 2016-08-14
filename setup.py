@@ -22,8 +22,8 @@ setup(
 
     name='bob.learn.activation',
     version=version,
-    description='Bindings for bob.machine\'s Activation functors',
-    url='http://github.com/bioidiap/bob.learn.activation',
+    description='Bindings for Activation functors',
+    url='http://gitlab.idiap.ch/bob/bob.learn.activation',
     license='BSD',
     author='Andre Anjos',
     author_email='andre.anjos@idiap.ch',
