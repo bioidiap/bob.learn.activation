@@ -1,0 +1,10 @@
+# No documentation exists for these c++ types
+cpp:type bob
+cpp:type bob::learn
+cpp:type bob::learn::activation
+cpp:type bob::learn::activation::Activation
+cpp:type boost
+cpp:type boost::shared_ptr
+
+# These are not c++ types, but c - why Sphinx confuses those?
+cpp:type PyObject

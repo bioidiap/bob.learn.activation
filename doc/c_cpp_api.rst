@@ -55,21 +55,22 @@ the import function:
 Activation Functors
 -------------------
 
-.. cpp:type:: PyBobLearnActivationObject
+.. c:type:: PyBobLearnActivationObject
 
-   The pythonic object representation for a ``bob::machine::Activation``
-   object. It is the base class of all activation functors available in
-   |project|. In C/C++ code, we recommend you only manipulate objects like this
-   to keep your code agnostic to the activation type being used.
+   The pythonic object representation for a
+   ``bob::learn::activation::Activation`` object. It is the base class of all
+   activation functors available in |project|. In C/C++ code, we recommend you
+   only manipulate objects like this to keep your code agnostic to the
+   activation type being used.
 
    .. code-block:: cpp
 
       typedef struct {
         PyObject_HEAD
-        bob::machine::Activation* base;
+        bob::learn::activation::Activation* base;
       } PyBobLearnActivationObject;
 
-   .. cpp:member:: bob::machine::Activation* base
+   .. cpp:member:: bob::learn::activation::Activation* base
 
       A pointer to the activation functor virtual implementation.
 
@@ -80,13 +81,14 @@ Activation Functors
    Returns ``1`` if it is, and ``0`` otherwise.
 
 
-.. cpp:function:: PyObject* PyBobLearnActivation_NewFromActivation(boost::shared_ptr<bob::machine::Activation> a)
+.. cpp:function:: PyObject* PyBobLearnActivation_NewFromActivation(boost::shared_ptr<bob::learn::activation::Activation> a)
 
    Constructs a new :c:type:`PyBobLearnActivationObject` starting from a shared
-   pointer to a pre-allocated `bob::machine::Activation` instance. This API is
-   available so that return values from actuall C++ machines can be mapped into
-   Python. It is the sole way to build an object of type :py:class:`Activation`
-   without recurring to the derived classes.
+   pointer to a pre-allocated `bob::learn::activation::Activation` instance.
+   This API is available so that return values from actuall C++ machines can be
+   mapped into Python. It is the sole way to build an object of type
+   :py:class:`bob.learn.activation.Activation` without recurring to the derived
+   classes.
 
 .. note::
 
@@ -100,7 +102,7 @@ Activation Functors
 
       typedef struct {
         PyBobLearnActivationObject parent;
-        bob::machine::<Subtype>Activation* base;
+        bob::learn::activation::<Subtype>Activation* base;
       } PyBobLearn<Subtype>ActivationObject;
 
    Presently, ``<Subtype>`` can be one of:
