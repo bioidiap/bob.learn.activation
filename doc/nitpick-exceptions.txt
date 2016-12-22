@@ -5,6 +5,13 @@ cpp:type bob::learn::activation
 cpp:type bob::learn::activation::Activation
 cpp:type boost
 cpp:type boost::shared_ptr
+cpp:typeOrConcept bob
+cpp:typeOrConcept bob::learn
+cpp:typeOrConcept bob::learn::activation
+cpp:typeOrConcept bob::learn::activation::Activation
+cpp:typeOrConcept boost
+cpp:typeOrConcept boost::shared_ptr
 
 # These are not c++ types, but c - why Sphinx confuses those?
 cpp:type PyObject
+cpp:typeOrConcept PyObject
