@@ -7,6 +7,8 @@
    :target: https://www.idiap.ch/software/bob/docs/latest/bob/bob.learn.activation/master/index.html
 .. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/master/build.svg
    :target: https://gitlab.idiap.ch/bob/bob.learn.activation/commits/master
+.. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/master/coverage.svg
+   :target: https://gitlab.idiap.ch/bob/bob.learn.activation/commits/master
 .. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
    :target: https://gitlab.idiap.ch/bob/bob.learn.activation
 .. image:: http://img.shields.io/pypi/v/bob.learn.activation.svg
@@ -27,11 +29,10 @@ packages of Bob in the namespace ``bob.learn``.
 Installation
 ------------
 
-Follow our `installation`_ instructions. Then, using the Python interpreter
-provided by the distribution, bootstrap and buildout this package::
+Complete Bob's `installation`_ instructions. Then, to install this pacakge,
+run::
 
-  $ python bootstrap-buildout.py
-  $ ./bin/buildout
+  $ conda install bob.learn.activation
 
 
 Contact
