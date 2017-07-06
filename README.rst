@@ -2,9 +2,9 @@
 .. Sun 14 Aug 2016 20:48:25 CEST
 
 .. image:: http://img.shields.io/badge/docs-stable-yellow.svg
-   :target: http://pythonhosted.org/bob.learn.activation/index.html
+   :target: https://www.idiap.ch/software/bob/docs/bob/bob.learn.activation/stable/index.html
 .. image:: http://img.shields.io/badge/docs-latest-orange.svg
-   :target: https://www.idiap.ch/software/bob/docs/latest/bob/bob.learn.activation/master/index.html
+   :target: https://www.idiap.ch/software/bob/docs/bob/bob.learn.activation/master/index.html
 .. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/master/build.svg
    :target: https://gitlab.idiap.ch/bob/bob.learn.activation/commits/master
 .. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/master/coverage.svg
@@ -12,8 +12,6 @@
 .. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
    :target: https://gitlab.idiap.ch/bob/bob.learn.activation
 .. image:: http://img.shields.io/pypi/v/bob.learn.activation.svg
-   :target: https://pypi.python.org/pypi/bob.learn.activation
-.. image:: http://img.shields.io/pypi/dm/bob.learn.activation.svg
    :target: https://pypi.python.org/pypi/bob.learn.activation
 
 
@@ -29,7 +27,7 @@ packages of Bob in the namespace ``bob.learn``.
 Installation
 ------------
 
-Complete Bob's `installation`_ instructions. Then, to install this pacakge,
+Complete Bob's `installation`_ instructions. Then, to install this package,
 run::
 
   $ conda install bob.learn.activation
