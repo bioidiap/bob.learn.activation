@@ -1,14 +1,14 @@
 .. vim: set fileencoding=utf-8 :
 .. Sun 14 Aug 2016 20:48:25 CEST
 
-.. image:: http://img.shields.io/badge/docs-v2.0.11-yellow.svg
-   :target: https://www.idiap.ch/software/bob/docs/bob/bob.learn.activation/v2.0.11/index.html
+.. image:: http://img.shields.io/badge/docs-stable-yellow.svg
+   :target: https://www.idiap.ch/software/bob/docs/bob/bob.learn.activation/stable/index.html
 .. image:: http://img.shields.io/badge/docs-latest-orange.svg
    :target: https://www.idiap.ch/software/bob/docs/bob/bob.learn.activation/master/index.html
-.. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/v2.0.11/build.svg
-   :target: https://gitlab.idiap.ch/bob/bob.learn.activation/commits/v2.0.11
-.. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/v2.0.11/coverage.svg
-   :target: https://gitlab.idiap.ch/bob/bob.learn.activation/commits/v2.0.11
+.. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/master/build.svg
+   :target: https://gitlab.idiap.ch/bob/bob.learn.activation/commits/master
+.. image:: https://gitlab.idiap.ch/bob/bob.learn.activation/badges/master/coverage.svg
+   :target: https://gitlab.idiap.ch/bob/bob.learn.activation/commits/master
 .. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
    :target: https://gitlab.idiap.ch/bob/bob.learn.activation
 .. image:: http://img.shields.io/pypi/v/bob.learn.activation.svg
